@@ -1,0 +1,120 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* dot-rebuild palette. Page background is #F5F5F5, surfaces are white,
+       and every grey is warm black rgba(47,8,11,x). The shadcn variables
+       below hold those tints flattened onto white, because the hsl(var())
+       pattern cannot carry alpha. The raw tints live in --tint-* further
+       down; prefer those when painting over non-white backgrounds. */
+    --background: 0 0% 96.1%;
+    --foreground: 0 0% 0%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 0%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 0%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 356 9% 96%;
+    --secondary-foreground: 0 0% 0%;
+    --muted: 356 9% 96%;
+    --muted-foreground: 355 9% 64%;
+    --accent: 356 9% 96%;
+    --accent-foreground: 0 0% 0%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 356 8% 89%;
+    --input: 356 8% 89%;
+    --ring: 0 0% 0%;
+    --radius: 0.5rem;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 0 0% 0%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 356 9% 96%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 356 8% 89%;
+    --sidebar-ring: 0 0% 0%;
+    /* Colored icon chips (Freeform-style): Apple system colors on filled
+       circles with white glyphs. Everything else stays dot-monochrome. */
+    --star: 48 100% 50%;
+    --smart-inbox: 211 100% 50%;
+    --smart-today: 35 100% 50%;
+    --smart-upcoming: 280 68% 60%;
+    --smart-starred: 48 100% 50%;
+
+    /* Raw warm-black tints, straight from dot-rebuild. */
+    --tint-04: rgba(47, 8, 11, 0.04);  /* hover */
+    --tint-12: rgba(47, 8, 11, 0.12);  /* pressed, borders, dividers */
+    --tint-40: rgba(47, 8, 11, 0.4);   /* secondary text */
+    --tint-56: rgba(47, 8, 11, 0.56);  /* tertiary text */
+    --tint-68: rgba(47, 8, 11, 0.68);  /* overlay hints */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Nunito', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizelegibility;
+  }
+  ::selection {
+    background: rgba(44, 0, 0, 0.2);
+  }
+  ::placeholder {
+    color: rgba(0, 0, 0, 0.25);
+  }
+}
+
+@layer utilities {
+  /* dot-rebuild type scale, measured live from the running app. */
+  .type-body-sm {
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0.13px;
+    color: var(--tint-40);
+  }
+  .type-body-md {
+    font-size: 15px;
+    line-height: 21px;
+    letter-spacing: 0.075px;
+    font-feature-settings: 'ss01' on;
+  }
+  .type-body-lg {
+    font-size: 17px;
+    line-height: 24px;
+    font-feature-settings: 'ss01' on, 'ss02' on;
+  }
+  .type-heading-md {
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.7px;
+    font-weight: 700;
+  }
+
+  .task-complete-check {
+    animation: checkFill 0.3s ease-out forwards;
+  }
+
+  .task-fade-completed {
+    animation: fadeToCompleted 0.3s ease-out 0.5s forwards;
+  }
+}
+
+@keyframes checkFill {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeToCompleted {
+  0% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0.6; transform: translateY(4px); }
+}
