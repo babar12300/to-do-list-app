@@ -21,7 +21,14 @@ describe('taskActions', () => {
     expect(ids).toContain('open');
     expect(ids).toContain('complete');
     expect(ids).toContain('star');
+    expect(ids).toContain('email');
     expect(ids).toContain('delete');
+  });
+
+  it('offers Email as a non-destructive share action', () => {
+    const email = taskActions(task).find(a => a.id === 'email');
+    expect(email).toBeDefined();
+    expect(email?.destructive).toBeUndefined();
   });
 
   it('puts the destructive action last, alone in its band (rule 4)', () => {
