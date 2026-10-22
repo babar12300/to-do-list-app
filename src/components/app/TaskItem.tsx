@@ -5,6 +5,7 @@ import { Star, Check, MoreHorizontal } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format, parseISO } from 'date-fns';
 import { taskActions } from './item-actions';
+import { taskEmailPrefill } from '@/lib/email';
 import { defaultListEmoji } from '@/data/emoji';
 import { Calendar } from '@/components/ui/calendar';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -75,8 +76,10 @@ export function TaskItem({ taskId }: TaskItemProps) {
     if (id === 'rename') { setRenameValue(task.title); setRenaming(true); }
     if (id === 'dueDate') setPickingDate(true);
     if (id === 'move') setMovingList(true);
+    // Email opens the shared compose window with the task as the draft.
+    if (id === 'email') dispatch({ type: 'OPEN_COMPOSER', payload: taskEmailPrefill(task, lists.find(l => l.id === task.listId)?.name, language) });
     if (id === 'delete') setConfirmingDelete(true);
-  }, [dispatch, task, toggleComplete]);
+  }, [dispatch, task, toggleComplete, lists, language]);
 
   const commitRename = useCallback(() => {
     if (!task) return;

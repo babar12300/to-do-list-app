@@ -245,6 +245,45 @@ describe('AppContext', () => {
     expect(capturedState.lists[0].emoji).toBe('🚀');
   });
 
+  it('OPEN_COMPOSER opens the composer with a prefill; CLOSE resets both', () => {
+    let capturedState: any;
+    render(
+      <AppProvider>
+        <TestConsumer onRender={ctx => { capturedState = ctx.state; }} />
+        <DispatchButton action={{ type: 'OPEN_COMPOSER', payload: { subject: 'Hi' } }} label="open" />
+        <DispatchButton action={{ type: 'CLOSE_COMPOSER' }} label="close" />
+      </AppProvider>
+    );
+    expect(capturedState.composerOpen).toBe(false);
+    expect(capturedState.composerPrefill).toBeNull();
+    act(() => { screen.getByText('open').click(); });
+    expect(capturedState.composerOpen).toBe(true);
+    expect(capturedState.composerPrefill).toEqual({ subject: 'Hi' });
+    act(() => { screen.getByText('close').click(); });
+    expect(capturedState.composerOpen).toBe(false);
+    expect(capturedState.composerPrefill).toBeNull();
+  });
+
+  it('composer state is never written to localStorage', () => {
+    const mock = mockLocalStorage();
+    vi.useFakeTimers();
+    try {
+      render(
+        <AppProvider>
+          <TestConsumer onRender={() => {}} />
+          <DispatchButton action={{ type: 'OPEN_COMPOSER', payload: { subject: 'Hi' } }} label="open" />
+        </AppProvider>
+      );
+      act(() => { screen.getByText('open').click(); });
+      act(() => { vi.advanceTimersByTime(400); });
+      const saved = JSON.parse(mock.setItem.mock.calls[0][1]);
+      expect(saved.composerOpen).toBe(false);
+      expect(saved.composerPrefill).toBeNull();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('useApp throws outside provider', () => {
     const Comp = () => { useApp(); return null; };
     expect(() => render(<Comp />)).toThrow('useApp must be used within AppProvider');

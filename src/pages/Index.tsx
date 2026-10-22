@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { Sidebar } from '@/components/app/Sidebar';
 import { TaskList } from '@/components/app/TaskList';
 import { TaskDetailPanel } from '@/components/app/TaskDetailPanel';
+import { EmailComposer } from '@/components/app/EmailComposer';
 
 function AppLayout() {
   const { state } = useApp();
@@ -89,6 +90,9 @@ function AppLayout() {
 
       {/* Detail panel */}
       {activeTaskId && <TaskDetailPanel />}
+
+      {/* Shared email composer */}
+      <EmailComposer />
     </div>
   );
 }

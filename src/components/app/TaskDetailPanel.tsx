@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useApp } from '@/context/AppContext';
 import { t } from '@/i18n/translations';
-import { X, Star, CalendarDays, Trash2, Link as LinkIcon, ImageIcon, Plus, ExternalLink } from 'lucide-react';
+import { X, Star, CalendarDays, Trash2, Link as LinkIcon, ImageIcon, Plus, ExternalLink, Mail } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -9,6 +9,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { format, parseISO } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { taskEmailPrefill } from '@/lib/email';
 import { defaultListEmoji } from '@/data/emoji';
 import { toast } from 'sonner';
 
@@ -303,8 +304,15 @@ export function TaskDetailPanel() {
           </div>
         </div>
 
-        {/* Delete */}
+        {/* Email + Delete */}
         <div className="px-6 py-6">
+          <button
+            onClick={() => dispatch({ type: 'OPEN_COMPOSER', payload: taskEmailPrefill(task, lists.find(l => l.id === task.listId)?.name, language) })}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 mb-3 rounded-row text-foreground hover:bg-tint-4 transition-colors type-body-md"
+          >
+            <Mail className="w-4 h-4" />
+            {t(language, 'emailTask')}
+          </button>
           <AlertDialog>
             <AlertDialogTrigger asChild>
               <button className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-row text-destructive hover:bg-tint-4 transition-colors type-body-md">

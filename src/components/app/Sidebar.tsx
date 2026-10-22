@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, Fragment } from 'react';
 import { useApp, generateId } from '@/context/AppContext';
 import { t } from '@/i18n/translations';
 import { format, addDays } from 'date-fns';
-import { Search, Inbox, CalendarDays, Star, CalendarClock, Plus, Settings, Menu, MoreHorizontal, PanelLeftClose } from 'lucide-react';
+import { Search, Inbox, CalendarDays, Star, CalendarClock, Plus, Settings, Menu, MoreHorizontal, PanelLeftClose, Mail } from 'lucide-react';
 import { WallpaperPicker } from './WallpaperPicker';
 import { SettingsDialog } from './SettingsDialog';
 import { EmojiPickerDialog } from './EmojiPickerDialog';
@@ -295,6 +295,13 @@ export function Sidebar() {
         {/* Bottom actions */}
         <div className="p-3 border-t-[0.5px] border-tint-12 flex items-center gap-1">
           <WallpaperPicker />
+          <button
+            onClick={() => dispatch({ type: 'OPEN_COMPOSER' })}
+            className={cn(iconBtn, 'w-8 h-8')}
+            aria-label={t(language, 'composeEmail')}
+          >
+            <Mail className="w-4 h-4" />
+          </button>
           <button
             onClick={() => setShowSettings(true)}
             className={cn(iconBtn, 'w-8 h-8')}

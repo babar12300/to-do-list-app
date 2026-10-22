@@ -33,6 +33,9 @@ export interface AppState {
   wallpaper: string;
   language: string;
   sidebarOpen: boolean;
+  // Ephemeral: never written to localStorage (see persistable()).
+  composerOpen: boolean;
+  composerPrefill: { to?: string; subject?: string; body?: string } | null;
 }
 
 type Action =
@@ -51,7 +54,9 @@ type Action =
   | { type: 'SET_DATE_FILTER'; payload: string | null }
   | { type: 'SET_WALLPAPER'; payload: string }
   | { type: 'SET_LANGUAGE'; payload: string }
-  | { type: 'TOGGLE_SIDEBAR' };
+  | { type: 'TOGGLE_SIDEBAR' }
+  | { type: 'OPEN_COMPOSER'; payload?: { to?: string; subject?: string; body?: string } }
+  | { type: 'CLOSE_COMPOSER' };
 
 const now = new Date().toISOString();
 
@@ -69,6 +74,8 @@ const defaultState: AppState = {
   wallpaper: defaultWallpaper,
   language: 'en',
   sidebarOpen: true,
+  composerOpen: false,
+  composerPrefill: null,
 };
 
 function reducer(state: AppState, action: Action): AppState {
@@ -119,6 +126,10 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, language: action.payload };
     case 'TOGGLE_SIDEBAR':
       return { ...state, sidebarOpen: !state.sidebarOpen };
+    case 'OPEN_COMPOSER':
+      return { ...state, composerOpen: true, composerPrefill: action.payload ?? null };
+    case 'CLOSE_COMPOSER':
+      return { ...state, composerOpen: false, composerPrefill: null };
     default:
       return state;
   }
@@ -133,6 +144,12 @@ function loadState(): AppState {
     }
   } catch {}
   return defaultState;
+}
+
+// The composer's open/prefill state is a draft in progress, not app data: a
+// reload should never reopen a half-written email, so it is stripped on save.
+function persistable(s: AppState) {
+  return { ...s, composerOpen: false, composerPrefill: null };
 }
 
 interface AppContextType {
@@ -152,7 +169,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     clearTimeout(timerRef.current);
     timerRef.current = window.setTimeout(() => {
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(s));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable(s)));
       } catch {
         toast.error('Storage is full. Please delete some completed tasks.');
       }
@@ -169,7 +186,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const flush = () => {
       clearTimeout(timerRef.current);
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(stateRef.current));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable(stateRef.current)));
       } catch {}
     };
     window.addEventListener('pagehide', flush);

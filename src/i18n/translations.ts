@@ -61,6 +61,12 @@ const en = {
   chooseEmoji: "Choose an emoji",
   noEmoji: "No emoji",
   save: "Save",
+  composeEmail: "New email",
+  emailTask: "Email…",
+  to: "To",
+  subject: "Subject",
+  message: "Message",
+  send: "Send",
 };
 
 const es: Record<string, string> = {
@@ -87,6 +93,7 @@ const es: Record<string, string> = {
   open: "Abrir", rename: "Renombrar", markComplete: "Marcar como completada", markIncomplete: "Marcar como pendiente",
   taskActions: "Acciones de tarea", listActions: "Acciones de lista",
   emptyFilter: "No hay tareas en", clearFilter: "Quitar filtro", emptyLists: "Aún no hay listas. Usa + para añadir una.", setDueDate: "Establecer fecha límite…", moveToListAction: "Mover a lista…", changeEmoji: "Cambiar emoji…", chooseEmoji: "Elige un emoji", noEmoji: "Sin emoji", save: "Guardar",
+  composeEmail: "Nuevo correo", emailTask: "Enviar por correo…", to: "Para", subject: "Asunto", message: "Mensaje", send: "Enviar",
 };
 
 const fr: Record<string, string> = {
@@ -112,6 +119,7 @@ const fr: Record<string, string> = {
   open: "Ouvrir", rename: "Renommer", markComplete: "Marquer comme terminée", markIncomplete: "Marquer comme à faire",
   taskActions: "Actions de tâche", listActions: "Actions de liste",
   emptyFilter: "Aucune tâche dans", clearFilter: "Effacer le filtre", emptyLists: "Aucune liste. Utilisez + pour en ajouter une.", setDueDate: "Définir une date d'échéance…", moveToListAction: "Déplacer vers…", changeEmoji: "Changer l'emoji…", chooseEmoji: "Choisissez un emoji", noEmoji: "Aucun emoji", save: "Enregistrer",
+  composeEmail: "Nouvel e-mail", emailTask: "Envoyer par e-mail…", to: "À", subject: "Objet", message: "Message", send: "Envoyer",
 };
 
 const de: Record<string, string> = {
@@ -138,6 +146,7 @@ const de: Record<string, string> = {
   open: "Öffnen", rename: "Umbenennen", markComplete: "Als erledigt markieren", markIncomplete: "Als offen markieren",
   taskActions: "Aufgabenaktionen", listActions: "Listenaktionen",
   emptyFilter: "Keine Aufgaben in", clearFilter: "Filter zurücksetzen", emptyLists: "Noch keine Listen. Mit + eine hinzufügen.", setDueDate: "Fälligkeitsdatum setzen…", moveToListAction: "Verschieben nach…", changeEmoji: "Emoji ändern…", chooseEmoji: "Emoji auswählen", noEmoji: "Kein Emoji", save: "Speichern",
+  composeEmail: "Neue E-Mail", emailTask: "Per E-Mail senden…", to: "An", subject: "Betreff", message: "Nachricht", send: "Senden",
 };
 
 const pt: Record<string, string> = {
@@ -163,6 +172,7 @@ const pt: Record<string, string> = {
   open: "Abrir", rename: "Renomear", markComplete: "Marcar como concluída", markIncomplete: "Marcar como pendente",
   taskActions: "Ações da tarefa", listActions: "Ações da lista",
   emptyFilter: "Nenhuma tarefa em", clearFilter: "Limpar filtro", emptyLists: "Ainda não há listas. Use + para adicionar uma.", setDueDate: "Definir data de vencimento…", moveToListAction: "Mover para lista…", changeEmoji: "Alterar emoji…", chooseEmoji: "Escolha um emoji", noEmoji: "Sem emoji", save: "Salvar",
+  composeEmail: "Novo e-mail", emailTask: "Enviar por e-mail…", to: "Para", subject: "Assunto", message: "Mensagem", send: "Enviar",
 };
 
 const ja: Record<string, string> = {
@@ -188,6 +198,7 @@ const ja: Record<string, string> = {
   open: "開く", rename: "名前を変更", markComplete: "完了にする", markIncomplete: "未完了にする",
   taskActions: "タスク操作", listActions: "リスト操作",
   emptyFilter: "該当するタスクはありません", clearFilter: "フィルターを解除", emptyLists: "リストがまだありません。+ で追加できます。", setDueDate: "期日を設定…", moveToListAction: "リストに移動…", changeEmoji: "絵文字を変更…", chooseEmoji: "絵文字を選択", noEmoji: "絵文字なし", save: "保存",
+  composeEmail: "新しいメール", emailTask: "メールで送信…", to: "宛先", subject: "件名", message: "メッセージ", send: "送信",
 };
 
 const zh: Record<string, string> = {
@@ -212,6 +223,7 @@ const zh: Record<string, string> = {
   open: "打开", rename: "重命名", markComplete: "标记为完成", markIncomplete: "标记为未完成",
   taskActions: "任务操作", listActions: "列表操作",
   emptyFilter: "没有任务在", clearFilter: "清除筛选", emptyLists: "还没有列表。点击 + 添加一个。", setDueDate: "设置截止日期…", moveToListAction: "移动到列表…", changeEmoji: "更换表情…", chooseEmoji: "选择一个表情", noEmoji: "无表情", save: "保存",
+  composeEmail: "新邮件", emailTask: "通过邮件发送…", to: "收件人", subject: "主题", message: "内容", send: "发送",
 };
 
 const ko: Record<string, string> = {
@@ -237,6 +249,7 @@ const ko: Record<string, string> = {
   open: "열기", rename: "이름 바꾸기", markComplete: "완료로 표시", markIncomplete: "미완료로 표시",
   taskActions: "작업 메뉴", listActions: "목록 메뉴",
   emptyFilter: "해당 작업이 없습니다", clearFilter: "필터 지우기", emptyLists: "목록이 아직 없습니다. +로 추가하세요.", setDueDate: "마감일 설정…", moveToListAction: "목록으로 이동…", changeEmoji: "이모지 변경…", chooseEmoji: "이모지 선택", noEmoji: "이모지 없음", save: "저장",
+  composeEmail: "새 메일", emailTask: "메일로 보내기…", to: "받는 사람", subject: "제목", message: "메시지", send: "보내기",
 };
 
 const nl: Record<string, string> = {
@@ -262,6 +275,7 @@ const nl: Record<string, string> = {
   open: "Openen", rename: "Naam wijzigen", markComplete: "Markeren als voltooid", markIncomplete: "Markeren als onvoltooid",
   taskActions: "Taakacties", listActions: "Lijstacties",
   emptyFilter: "Geen taken in", clearFilter: "Filter wissen", emptyLists: "Nog geen lijsten. Gebruik + om er een toe te voegen.", setDueDate: "Vervaldatum instellen…", moveToListAction: "Verplaatsen naar…", changeEmoji: "Emoji wijzigen…", chooseEmoji: "Kies een emoji", noEmoji: "Geen emoji", save: "Opslaan",
+  composeEmail: "Nieuwe e-mail", emailTask: "E-mailen…", to: "Aan", subject: "Onderwerp", message: "Bericht", send: "Verzenden",
 };
 
 const it: Record<string, string> = {
@@ -287,6 +301,7 @@ const it: Record<string, string> = {
   open: "Apri", rename: "Rinomina", markComplete: "Segna come completata", markIncomplete: "Segna come da fare",
   taskActions: "Azioni attività", listActions: "Azioni lista",
   emptyFilter: "Nessuna attività in", clearFilter: "Rimuovi filtro", emptyLists: "Nessuna lista. Usa + per aggiungerne una.", setDueDate: "Imposta scadenza…", moveToListAction: "Sposta in lista…", changeEmoji: "Cambia emoji…", chooseEmoji: "Scegli un'emoji", noEmoji: "Nessuna emoji", save: "Salva",
+  composeEmail: "Nuova e-mail", emailTask: "Invia per e-mail…", to: "A", subject: "Oggetto", message: "Messaggio", send: "Invia",
 };
 
 export const translations: Record<string, Record<string, string>> = {
