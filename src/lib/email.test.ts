@@ -37,7 +37,7 @@ describe('taskEmailPrefill', () => {
     expect(draft.body).toContain('Fecha límite:');
   });
 
-  it('never fills in a recipient — that is the user's choice at send time', () => {
+  it("never fills in a recipient — that is the user's choice at send time", () => {
     expect(taskEmailPrefill(createTask(), 'Inbox', 'en').to).toBeUndefined();
   });
 });
