@@ -1,6 +1,10 @@
 export type TranslationKey = keyof typeof en;
 
 const en = {
+  addWallpaperFromDevice: "Add from device",
+  wallpaperImageError: "Choose a photo your browser can open (JPG, PNG or WebP).",
+  wallpaperStorageFull: "Not enough device storage to save this wallpaper.",
+
   inbox: "Inbox",
   today: "Today",
   upcoming: "Upcoming",
@@ -70,6 +74,10 @@ const en = {
 };
 
 const es: Record<string, string> = {
+  addWallpaperFromDevice: "Añadir desde el dispositivo",
+  wallpaperImageError: "Elige una foto que tu navegador pueda abrir (JPG, PNG o WebP).",
+  wallpaperStorageFull: "No hay espacio suficiente para guardar este fondo.",
+
   inbox: "Bandeja de entrada", today: "Hoy", upcoming: "Próximos", starred: "Destacados",
   smartLists: "Listas Inteligentes", lists: "Listas", searchTasks: "Buscar tareas...",
   addTask: "Añadir tarea...", completed: "Completadas", tomorrow: "Mañana",
@@ -97,6 +105,10 @@ const es: Record<string, string> = {
 };
 
 const fr: Record<string, string> = {
+  addWallpaperFromDevice: "Ajouter depuis l’appareil",
+  wallpaperImageError: "Choisissez une photo lisible par votre navigateur (JPG, PNG ou WebP).",
+  wallpaperStorageFull: "Espace insuffisant pour enregistrer ce fond.",
+
   inbox: "Boîte de réception", today: "Aujourd'hui", upcoming: "À venir", starred: "Favoris",
   smartLists: "Listes Intelligentes", lists: "Listes", searchTasks: "Rechercher...",
   addTask: "Ajouter une tâche...", completed: "Terminées", tomorrow: "Demain",
@@ -123,6 +135,10 @@ const fr: Record<string, string> = {
 };
 
 const de: Record<string, string> = {
+  addWallpaperFromDevice: "Vom Gerät hinzufügen",
+  wallpaperImageError: "Wähle ein Foto, das dein Browser öffnen kann (JPG, PNG oder WebP).",
+  wallpaperStorageFull: "Nicht genug Speicher für dieses Hintergrundbild.",
+
   inbox: "Posteingang", today: "Heute", upcoming: "Bevorstehend", starred: "Markiert",
   smartLists: "Smart-Listen", lists: "Listen", searchTasks: "Aufgaben suchen...",
   addTask: "Aufgabe hinzufügen...", completed: "Erledigt", tomorrow: "Morgen",
@@ -150,6 +166,10 @@ const de: Record<string, string> = {
 };
 
 const pt: Record<string, string> = {
+  addWallpaperFromDevice: "Adicionar do dispositivo",
+  wallpaperImageError: "Escolha uma foto que o navegador possa abrir (JPG, PNG ou WebP).",
+  wallpaperStorageFull: "Espaço insuficiente para salvar este papel de parede.",
+
   inbox: "Caixa de entrada", today: "Hoje", upcoming: "Próximos", starred: "Favoritos",
   smartLists: "Listas Inteligentes", lists: "Listas", searchTasks: "Pesquisar tarefas...",
   addTask: "Adicionar tarefa...", completed: "Concluídas", tomorrow: "Amanhã",
@@ -176,6 +196,10 @@ const pt: Record<string, string> = {
 };
 
 const ja: Record<string, string> = {
+  addWallpaperFromDevice: "デバイスから追加",
+  wallpaperImageError: "ブラウザで開ける写真（JPG、PNG、WebP）を選んでください。",
+  wallpaperStorageFull: "壁紙を保存する空き容量がありません。",
+
   inbox: "受信トレイ", today: "今日", upcoming: "近日中", starred: "スター付き",
   smartLists: "スマートリスト", lists: "リスト", searchTasks: "タスクを検索...",
   addTask: "タスクを追加...", completed: "完了", tomorrow: "明日",
@@ -202,6 +226,10 @@ const ja: Record<string, string> = {
 };
 
 const zh: Record<string, string> = {
+  addWallpaperFromDevice: "从设备添加",
+  wallpaperImageError: "请选择浏览器可以打开的照片（JPG、PNG 或 WebP）。",
+  wallpaperStorageFull: "设备空间不足，无法保存此壁纸。",
+
   inbox: "收件箱", today: "今天", upcoming: "即将到来", starred: "已加星",
   smartLists: "智能列表", lists: "列表", searchTasks: "搜索任务...",
   addTask: "添加任务...", completed: "已完成", tomorrow: "明天",
@@ -227,6 +255,10 @@ const zh: Record<string, string> = {
 };
 
 const ko: Record<string, string> = {
+  addWallpaperFromDevice: "기기에서 추가",
+  wallpaperImageError: "브라우저에서 열 수 있는 사진(JPG, PNG, WebP)을 선택하세요.",
+  wallpaperStorageFull: "배경화면을 저장할 공간이 부족합니다.",
+
   inbox: "받은편지함", today: "오늘", upcoming: "예정", starred: "중요",
   smartLists: "스마트 목록", lists: "목록", searchTasks: "작업 검색...",
   addTask: "작업 추가...", completed: "완료됨", tomorrow: "내일",
@@ -253,6 +285,10 @@ const ko: Record<string, string> = {
 };
 
 const nl: Record<string, string> = {
+  addWallpaperFromDevice: "Toevoegen vanaf apparaat",
+  wallpaperImageError: "Kies een foto die je browser kan openen (JPG, PNG of WebP).",
+  wallpaperStorageFull: "Onvoldoende opslagruimte voor deze achtergrond.",
+
   inbox: "Postvak IN", today: "Vandaag", upcoming: "Aankomend", starred: "Met ster",
   smartLists: "Slimme Lijsten", lists: "Lijsten", searchTasks: "Taken zoeken...",
   addTask: "Taak toevoegen...", completed: "Voltooid", tomorrow: "Morgen",
@@ -279,6 +315,10 @@ const nl: Record<string, string> = {
 };
 
 const it: Record<string, string> = {
+  addWallpaperFromDevice: "Aggiungi dal dispositivo",
+  wallpaperImageError: "Scegli una foto che il browser può aprire (JPG, PNG o WebP).",
+  wallpaperStorageFull: "Spazio insufficiente per salvare questo sfondo.",
+
   inbox: "Posta in arrivo", today: "Oggi", upcoming: "In arrivo", starred: "Preferiti",
   smartLists: "Liste Intelligenti", lists: "Liste", searchTasks: "Cerca attività...",
   addTask: "Aggiungi attività...", completed: "Completate", tomorrow: "Domani",
