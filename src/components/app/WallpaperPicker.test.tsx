@@ -20,9 +20,11 @@ describe('device wallpapers', () => {
   beforeEach(() => { mockLocalStorage(); vi.clearAllMocks(); });
 
   async function upload() {
-    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper', exact: true }));
-    fireEvent.change(screen.getByLabelText('Add from device', { selector: 'input' }), {
-      target: { files: [new File(['photo'], 'photo.png', { type: 'image/png' })] },
+    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper' }));
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText('Add from device', { selector: 'input' }), {
+        target: { files: [new File(['photo'], 'photo.png', { type: 'image/png' })] },
+      });
     });
   }
 
@@ -38,10 +40,10 @@ describe('device wallpapers', () => {
     view.unmount();
     renderWithProvider(<><WallpaperPicker /><Selection /></>);
     expect(screen.getByTestId('selection')).toHaveTextContent(photo);
-    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper', exact: true }));
-    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper 2', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper 2' }));
     expect(screen.getByTestId('selection')).toHaveTextContent(defaultWallpaper);
-    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper 1', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper 1' }));
     expect(screen.getByTestId('selection')).toHaveTextContent(photo);
   });
 
