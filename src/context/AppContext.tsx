@@ -31,6 +31,7 @@ export interface AppState {
   searchQuery: string;
   dateFilter: string | null;
   wallpaper: string;
+  customWallpapers: string[];
   language: string;
   sidebarOpen: boolean;
   // Ephemeral: never written to localStorage (see persistable()).
@@ -53,6 +54,7 @@ type Action =
   | { type: 'SET_SEARCH'; payload: string }
   | { type: 'SET_DATE_FILTER'; payload: string | null }
   | { type: 'SET_WALLPAPER'; payload: string }
+  | { type: 'ADD_DEVICE_WALLPAPER'; payload: string }
   | { type: 'SET_LANGUAGE'; payload: string }
   | { type: 'TOGGLE_SIDEBAR' }
   | { type: 'OPEN_COMPOSER'; payload?: { to?: string; subject?: string; body?: string } }
@@ -72,6 +74,7 @@ const defaultState: AppState = {
   searchQuery: '',
   dateFilter: null,
   wallpaper: defaultWallpaper,
+  customWallpapers: [],
   language: 'en',
   sidebarOpen: true,
   composerOpen: false,
@@ -122,6 +125,8 @@ function reducer(state: AppState, action: Action): AppState {
       return { ...state, dateFilter: state.dateFilter === action.payload ? null : action.payload };
     case 'SET_WALLPAPER':
       return { ...state, wallpaper: action.payload };
+    case 'ADD_DEVICE_WALLPAPER':
+      return { ...state, wallpaper: action.payload, customWallpapers: [...new Set([action.payload, ...state.customWallpapers])] };
     case 'SET_LANGUAGE':
       return { ...state, language: action.payload };
     case 'TOGGLE_SIDEBAR':
@@ -148,7 +153,7 @@ function loadState(): AppState {
 
 // The composer's open/prefill state is a draft in progress, not app data: a
 // reload should never reopen a half-written email, so it is stripped on save.
-function persistable(s: AppState) {
+export function persistable(s: AppState) {
   return { ...s, composerOpen: false, composerPrefill: null };
 }
 
