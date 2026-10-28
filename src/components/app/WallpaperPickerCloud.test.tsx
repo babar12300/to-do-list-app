@@ -5,10 +5,11 @@ import { useApp } from '@/context/AppContext';
 import { mockLocalStorage, renderWithProvider } from '@/test/helpers';
 
 const remote = 'data:image/webp;base64,cmVtb3Rl';
-vi.mock('@/hooks/use-wallpaper-account', () => ({ useWallpaperAccount: () => ({
-  user: { id: 'u1' }, ready: true, name: 'Ann', avatar: null, loading: false, refresh: vi.fn(),
+const account = vi.hoisted(() => ({
+  user: { id: 'u1' }, ready: true, name: 'Ann', avatar: null, loading: false, refresh: () => Promise.resolve(),
   photos: [{ path: 'u1/wallpapers/abc.webp', url: 'https://signed/abc' }],
-}) }));
+}));
+vi.mock('@/hooks/use-wallpaper-account', () => ({ useWallpaperAccount: () => account }));
 vi.mock('@/lib/cloud-wallpapers', () => ({
   uploadPersonalImage: vi.fn(async () => 'u1/wallpapers/local.webp'),
   downloadWallpaper: vi.fn(async () => remote),
