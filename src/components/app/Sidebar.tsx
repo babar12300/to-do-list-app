@@ -4,6 +4,7 @@ import { t } from '@/i18n/translations';
 import { format, addDays } from 'date-fns';
 import { Search, Inbox, CalendarDays, Star, CalendarClock, Plus, Settings, Menu, MoreHorizontal, PanelLeftClose, Mail } from 'lucide-react';
 import { WallpaperPicker } from './WallpaperPicker';
+import { DailyPlanner } from './DailyPlanner';
 import { SettingsDialog } from './SettingsDialog';
 import { EmojiPickerDialog } from './EmojiPickerDialog';
 import { defaultListEmoji } from '@/data/emoji';
@@ -295,6 +296,7 @@ export function Sidebar() {
         {/* Bottom actions */}
         <div className="p-3 border-t-[0.5px] border-tint-12 flex items-center gap-1">
           <WallpaperPicker />
+          <DailyPlanner className={cn(iconBtn, 'w-8 h-8')} />
           <button
             onClick={() => dispatch({ type: 'OPEN_COMPOSER' })}
             className={cn(iconBtn, 'w-8 h-8')}
