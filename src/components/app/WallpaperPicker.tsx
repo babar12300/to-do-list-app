@@ -4,7 +4,6 @@ import { t } from '@/i18n/translations';
 import { wallpapers, wallpaperThumb } from '@/data/wallpapers';
 import { Image, Upload, Loader2, Cloud, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { prepareDeviceWallpaper } from '@/lib/device-wallpaper';
 import { toast } from 'sonner';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -130,7 +129,7 @@ export function WallpaperPicker() {
             </button>
             <input ref={avatarRef} type="file" accept="image/*" className="hidden"
               onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ''; if (f) void changeAvatar(f); }} />
-            <Input aria-label="Your name" placeholder="Your name" value={nameDraft} className="h-8"
+            <input aria-label="Your name" placeholder="Your name" value={nameDraft} className="h-8 flex-1 min-w-0 rounded-md border bg-background px-2 type-body-sm"
               onChange={e => setNameDraft(e.target.value)} onBlur={saveName}
               onKeyDown={e => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }} />
             <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" aria-label="Sign out"
