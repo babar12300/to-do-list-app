@@ -5,5 +5,6 @@
 - [ ] Tests and signed-in end-to-end verification.
 
 # AI daily planner
-- [ ] Finish task/deadline planning, validation, and error handling.
-- [ ] Deploy and run automated and live checks (signed-in check requires an account).
+- [x] Finish task/deadline planning, validation, and error handling.
+- [x] Deploy function; pass 19 planner/sidebar tests, check sign-in screen, and verify a real AI Gateway plan.
+- [ ] Signed-in end-to-end planning and wallpaper verification: blocked because the app has no signed-up account; the user must sign in first.
