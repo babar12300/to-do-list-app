@@ -103,6 +103,7 @@ const es: Record<string, string> = {
   taskActions: "Acciones de tarea", listActions: "Acciones de lista",
   emptyFilter: "No hay tareas en", clearFilter: "Quitar filtro", emptyLists: "Aún no hay listas. Usa + para añadir una.", setDueDate: "Establecer fecha límite…", moveToListAction: "Mover a lista…", changeEmoji: "Cambiar emoji…", chooseEmoji: "Elige un emoji", noEmoji: "Sin emoji", save: "Guardar",
   composeEmail: "Nuevo correo", emailTask: "Enviar por correo…", to: "Para", subject: "Asunto", message: "Mensaje", send: "Enviar",
+  paletteSearch: "Busca o ejecuta un comando…", paletteNoResults: "Sin resultados", paletteTasks: "Tareas", paletteActions: "Acciones", paletteGoTo: "Ir a", newTask: "Nueva tarea", weeklySummary: "Resumen semanal", currentStreak: "Racha actual", bestStreak: "Mejor racha", completedThisWeek: "Completadas esta semana", openTasks: "Tareas abiertas", overdue: "Vencidas", days: "días", commandPalette: "Paleta de comandos",
 };
 
 const fr: Record<string, string> = {
@@ -133,6 +134,7 @@ const fr: Record<string, string> = {
   taskActions: "Actions de tâche", listActions: "Actions de liste",
   emptyFilter: "Aucune tâche dans", clearFilter: "Effacer le filtre", emptyLists: "Aucune liste. Utilisez + pour en ajouter une.", setDueDate: "Définir une date d'échéance…", moveToListAction: "Déplacer vers…", changeEmoji: "Changer l'emoji…", chooseEmoji: "Choisissez un emoji", noEmoji: "Aucun emoji", save: "Enregistrer",
   composeEmail: "Nouvel e-mail", emailTask: "Envoyer par e-mail…", to: "À", subject: "Objet", message: "Message", send: "Envoyer",
+  paletteSearch: "Rechercher ou lancer une commande…", paletteNoResults: "Aucun résultat", paletteTasks: "Tâches", paletteActions: "Actions", paletteGoTo: "Aller à", newTask: "Nouvelle tâche", weeklySummary: "Bilan hebdomadaire", currentStreak: "Série actuelle", bestStreak: "Meilleure série", completedThisWeek: "Terminées cette semaine", openTasks: "Tâches ouvertes", overdue: "En retard", days: "jours", commandPalette: "Palette de commandes",
 };
 
 const de: Record<string, string> = {
@@ -164,6 +166,7 @@ const de: Record<string, string> = {
   taskActions: "Aufgabenaktionen", listActions: "Listenaktionen",
   emptyFilter: "Keine Aufgaben in", clearFilter: "Filter zurücksetzen", emptyLists: "Noch keine Listen. Mit + eine hinzufügen.", setDueDate: "Fälligkeitsdatum setzen…", moveToListAction: "Verschieben nach…", changeEmoji: "Emoji ändern…", chooseEmoji: "Emoji auswählen", noEmoji: "Kein Emoji", save: "Speichern",
   composeEmail: "Neue E-Mail", emailTask: "Per E-Mail senden…", to: "An", subject: "Betreff", message: "Nachricht", send: "Senden",
+  paletteSearch: "Suchen oder Befehl ausführen…", paletteNoResults: "Keine Treffer", paletteTasks: "Aufgaben", paletteActions: "Aktionen", paletteGoTo: "Gehe zu", newTask: "Neue Aufgabe", weeklySummary: "Wochenübersicht", currentStreak: "Aktuelle Serie", bestStreak: "Beste Serie", completedThisWeek: "Diese Woche erledigt", openTasks: "Offene Aufgaben", overdue: "Überfällig", days: "Tage", commandPalette: "Befehlspalette",
 };
 
 const pt: Record<string, string> = {
@@ -194,6 +197,7 @@ const pt: Record<string, string> = {
   taskActions: "Ações da tarefa", listActions: "Ações da lista",
   emptyFilter: "Nenhuma tarefa em", clearFilter: "Limpar filtro", emptyLists: "Ainda não há listas. Use + para adicionar uma.", setDueDate: "Definir data de vencimento…", moveToListAction: "Mover para lista…", changeEmoji: "Alterar emoji…", chooseEmoji: "Escolha um emoji", noEmoji: "Sem emoji", save: "Salvar",
   composeEmail: "Novo e-mail", emailTask: "Enviar por e-mail…", to: "Para", subject: "Assunto", message: "Mensagem", send: "Enviar",
+  paletteSearch: "Pesquise ou execute um comando…", paletteNoResults: "Nenhum resultado", paletteTasks: "Tarefas", paletteActions: "Ações", paletteGoTo: "Ir para", newTask: "Nova tarefa", weeklySummary: "Resumo semanal", currentStreak: "Sequência atual", bestStreak: "Melhor sequência", completedThisWeek: "Concluídas esta semana", openTasks: "Tarefas abertas", overdue: "Atrasadas", days: "dias", commandPalette: "Paleta de comandos",
 };
 
 const ja: Record<string, string> = {
@@ -224,6 +228,7 @@ const ja: Record<string, string> = {
   taskActions: "タスク操作", listActions: "リスト操作",
   emptyFilter: "該当するタスクはありません", clearFilter: "フィルターを解除", emptyLists: "リストがまだありません。+ で追加できます。", setDueDate: "期日を設定…", moveToListAction: "リストに移動…", changeEmoji: "絵文字を変更…", chooseEmoji: "絵文字を選択", noEmoji: "絵文字なし", save: "保存",
   composeEmail: "新しいメール", emailTask: "メールで送信…", to: "宛先", subject: "件名", message: "メッセージ", send: "送信",
+  paletteSearch: "検索またはコマンドを実行…", paletteNoResults: "該当なし", paletteTasks: "タスク", paletteActions: "アクション", paletteGoTo: "移動", newTask: "新しいタスク", weeklySummary: "週間サマリー", currentStreak: "現在の連続日数", bestStreak: "最長連続日数", completedThisWeek: "今週の完了", openTasks: "未完了タスク", overdue: "期限切れ", days: "日", commandPalette: "コマンドパレット",
 };
 
 const zh: Record<string, string> = {
@@ -253,6 +258,7 @@ const zh: Record<string, string> = {
   taskActions: "任务操作", listActions: "列表操作",
   emptyFilter: "没有任务在", clearFilter: "清除筛选", emptyLists: "还没有列表。点击 + 添加一个。", setDueDate: "设置截止日期…", moveToListAction: "移动到列表…", changeEmoji: "更换表情…", chooseEmoji: "选择一个表情", noEmoji: "无表情", save: "保存",
   composeEmail: "新邮件", emailTask: "通过邮件发送…", to: "收件人", subject: "主题", message: "内容", send: "发送",
+  paletteSearch: "搜索或运行命令…", paletteNoResults: "无结果", paletteTasks: "任务", paletteActions: "操作", paletteGoTo: "前往", newTask: "新任务", weeklySummary: "每周总结", currentStreak: "当前连续", bestStreak: "最佳连续", completedThisWeek: "本周完成", openTasks: "未完成任务", overdue: "已逾期", days: "天", commandPalette: "命令面板",
 };
 
 const ko: Record<string, string> = {
@@ -283,6 +289,7 @@ const ko: Record<string, string> = {
   taskActions: "작업 메뉴", listActions: "목록 메뉴",
   emptyFilter: "해당 작업이 없습니다", clearFilter: "필터 지우기", emptyLists: "목록이 아직 없습니다. +로 추가하세요.", setDueDate: "마감일 설정…", moveToListAction: "목록으로 이동…", changeEmoji: "이모지 변경…", chooseEmoji: "이모지 선택", noEmoji: "이모지 없음", save: "저장",
   composeEmail: "새 메일", emailTask: "메일로 보내기…", to: "받는 사람", subject: "제목", message: "메시지", send: "보내기",
+  paletteSearch: "검색하거나 명령 실행…", paletteNoResults: "결과 없음", paletteTasks: "작업", paletteActions: "동작", paletteGoTo: "이동", newTask: "새 작업", weeklySummary: "주간 요약", currentStreak: "현재 연속", bestStreak: "최고 연속", completedThisWeek: "이번 주 완료", openTasks: "열린 작업", overdue: "기한 지남", days: "일", commandPalette: "명령 팔레트",
 };
 
 const nl: Record<string, string> = {
@@ -313,6 +320,7 @@ const nl: Record<string, string> = {
   taskActions: "Taakacties", listActions: "Lijstacties",
   emptyFilter: "Geen taken in", clearFilter: "Filter wissen", emptyLists: "Nog geen lijsten. Gebruik + om er een toe te voegen.", setDueDate: "Vervaldatum instellen…", moveToListAction: "Verplaatsen naar…", changeEmoji: "Emoji wijzigen…", chooseEmoji: "Kies een emoji", noEmoji: "Geen emoji", save: "Opslaan",
   composeEmail: "Nieuwe e-mail", emailTask: "E-mailen…", to: "Aan", subject: "Onderwerp", message: "Bericht", send: "Verzenden",
+  paletteSearch: "Zoek of voer een opdracht uit…", paletteNoResults: "Geen resultaten", paletteTasks: "Taken", paletteActions: "Acties", paletteGoTo: "Ga naar", newTask: "Nieuwe taak", weeklySummary: "Weekoverzicht", currentStreak: "Huidige reeks", bestStreak: "Beste reeks", completedThisWeek: "Deze week voltooid", openTasks: "Open taken", overdue: "Achterstallig", days: "dagen", commandPalette: "Opdrachtenpalet",
 };
 
 const it: Record<string, string> = {
@@ -343,6 +351,7 @@ const it: Record<string, string> = {
   taskActions: "Azioni attività", listActions: "Azioni lista",
   emptyFilter: "Nessuna attività in", clearFilter: "Rimuovi filtro", emptyLists: "Nessuna lista. Usa + per aggiungerne una.", setDueDate: "Imposta scadenza…", moveToListAction: "Sposta in lista…", changeEmoji: "Cambia emoji…", chooseEmoji: "Scegli un'emoji", noEmoji: "Nessuna emoji", save: "Salva",
   composeEmail: "Nuova e-mail", emailTask: "Invia per e-mail…", to: "A", subject: "Oggetto", message: "Messaggio", send: "Invia",
+  paletteSearch: "Cerca o esegui un comando…", paletteNoResults: "Nessun risultato", paletteTasks: "Attività", paletteActions: "Azioni", paletteGoTo: "Vai a", newTask: "Nuova attività", weeklySummary: "Riepilogo settimanale", currentStreak: "Serie attuale", bestStreak: "Serie migliore", completedThisWeek: "Completate questa settimana", openTasks: "Attività aperte", overdue: "Scadute", days: "giorni", commandPalette: "Palette comandi",
 };
 
 export const translations: Record<string, Record<string, string>> = {
