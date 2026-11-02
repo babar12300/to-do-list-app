@@ -1,21 +1,25 @@
-# Contact
+# Babar Ali
 
-Thank you for your interest in connecting with me.
+Software Developer • Frontend Engineer • Product-Focused Builder
 
-## GitHub
-- GitHub: https://github.com/babar12300
-- Username: babar12300
+## About Me
+I am a frontend-focused software developer passionate about building clean, modern, and user-friendly web applications. I enjoy working with React, TypeScript, and product-driven interfaces that balance usability, performance, and maintainability.
 
-## Email
-- Email: babaraliye123@gmail.com
+## Contact Card
 
-## Preferred contact method
-- For project-related discussions, GitHub is the preferred option.
-- For direct communication, email is also available.
+### GitHub
+- https://github.com/babar12300
 
-## Best ways to reach out
-- Open an issue or discussion on GitHub for project questions or collaboration.
-- Send an email if you want to discuss opportunities, feedback, or partnerships.
+### Email
+- babaraliye123@gmail.com
 
-## Availability
-- I am typically responsive via GitHub and email for project inquiries, collaboration, and professional discussions.
+### Facebook
+- https://facebook.com/babar12300
+
+### Twitter / X
+- https://x.com/babar12300
+
+### Availability
+Open to collaboration, frontend work, and product-focused development opportunities.
+
+I’d be glad to connect and discuss projects, ideas, or opportunities.
