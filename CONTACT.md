@@ -8,13 +8,14 @@ I am a frontend-focused software developer passionate about building clean, mode
 ## Contact Card
 
 ### GitHub
-- https://github.com/babar12300
+- https://github.com/astori-dev
 
 ### Email
-- babaraliye123@gmail.com
+- astori.dev@gmail.com
+- astori_dev@outlook.com
 
 ### Facebook
-- https://facebook.com/babar12300
+- https://www.facebook.com/share/18RBHPSLFA/
 
 ### Twitter / X
 - https://x.com/babar12300
