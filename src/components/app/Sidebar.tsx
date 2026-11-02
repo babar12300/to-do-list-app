@@ -2,10 +2,13 @@ import { useState, useRef, useEffect, useCallback, Fragment } from 'react';
 import { useApp, generateId } from '@/context/AppContext';
 import { t } from '@/i18n/translations';
 import { format, addDays } from 'date-fns';
-import { Search, Inbox, CalendarDays, Star, CalendarClock, Plus, Settings, Menu, MoreHorizontal, PanelLeftClose, Mail } from 'lucide-react';
+import { Search, Inbox, CalendarDays, Star, CalendarClock, Plus, Settings, Menu, MoreHorizontal, PanelLeftClose, Mail, Command, Flame } from 'lucide-react';
 import { WallpaperPicker } from './WallpaperPicker';
 import { DailyPlanner } from './DailyPlanner';
 import { SettingsDialog } from './SettingsDialog';
+import { CommandPalette } from './CommandPalette';
+import { WeeklySummary } from './WeeklySummary';
+import { currentStreak } from '@/lib/productivity';
 import { EmojiPickerDialog } from './EmojiPickerDialog';
 import { defaultListEmoji } from '@/data/emoji';
 import { listActions } from './item-actions';
@@ -38,6 +41,9 @@ export function Sidebar() {
   const [editingListId, setEditingListId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
   const [showSettings, setShowSettings] = useState(false);
+  const [showPalette, setShowPalette] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
+  const streak = currentStreak(state.tasks);
   const [menuOpenListId, setMenuOpenListId] = useState<string | null>(null);
   const [deletingListId, setDeletingListId] = useState<string | null>(null);
   const [emojiListId, setEmojiListId] = useState<string | null>(null);
@@ -297,6 +303,12 @@ export function Sidebar() {
         <div className="p-3 border-t-[0.5px] border-tint-12 flex items-center gap-1">
           <WallpaperPicker />
           <DailyPlanner className={cn(iconBtn, 'w-8 h-8')} />
+          <button onClick={() => setShowPalette(true)} className={cn(iconBtn, 'w-8 h-8')} aria-label={t(language, 'commandPalette')} title="Ctrl/⌘ K">
+            <Command className="w-4 h-4" />
+          </button>
+          <button onClick={() => setShowSummary(true)} className={cn(iconBtn, 'h-8 px-2 gap-1 w-auto')} aria-label={t(language, 'weeklySummary')}>
+            <Flame className="w-4 h-4" />{streak > 0 && <span className="type-body-sm">{streak}</span>}
+          </button>
           <button
             onClick={() => dispatch({ type: 'OPEN_COMPOSER' })}
             className={cn(iconBtn, 'w-8 h-8')}
@@ -315,6 +327,8 @@ export function Sidebar() {
       </aside>
 
       <SettingsDialog open={showSettings} onOpenChange={setShowSettings} />
+      <CommandPalette open={showPalette} onOpenChange={setShowPalette} onOpenSummary={() => setShowSummary(true)} />
+      <WeeklySummary open={showSummary} onOpenChange={setShowSummary} />
 
       <EmojiPickerDialog
         open={!!emojiListId}
