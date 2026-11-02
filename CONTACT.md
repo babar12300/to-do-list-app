@@ -1,6 +1,6 @@
 # Astori Dev 
 
-Software Developer • Frontend Engineer • Product-Focused Builder
+Roblox games dev• Roblox games development tools dev• Website & Webapp dev
 
 ## About Me
 I am a frontend-focused software developer passionate about building clean, modern, and user-friendly web applications. I enjoy working with React, TypeScript, and product-driven interfaces that balance usability, performance, and maintainability.
