@@ -71,6 +71,7 @@ const en = {
   subject: "Subject",
   message: "Message",
   send: "Send",
+  paletteSearch: "Search or run a command…", paletteNoResults: "No matches", paletteTasks: "Tasks", paletteActions: "Actions", paletteGoTo: "Go to", newTask: "New task", weeklySummary: "Weekly summary", currentStreak: "Current streak", bestStreak: "Best streak", completedThisWeek: "Completed this week", openTasks: "Open tasks", overdue: "Overdue", days: "days", commandPalette: "Command palette",
 };
 
 const es: Record<string, string> = {
