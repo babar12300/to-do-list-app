@@ -313,18 +313,18 @@ export function Sidebar() {
         </nav>
 
         {/* Bottom actions */}
-        <div className="p-3 border-t-[0.5px] border-tint-12 flex flex-wrap items-center justify-between gap-1">
+        <div className="p-3 border-t-[0.5px] border-tint-12 flex items-center justify-between gap-0.5">
           <WallpaperPicker />
-          <DailyPlanner className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')} />
-          <button onClick={() => setShowPalette(true)} className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')} aria-label={t(language, 'commandPalette')} title="Ctrl/⌘ K">
+          <DailyPlanner className={cn(iconBtn, 'w-9 h-9 md:w-8 md:h-8 hover:bg-tint-12')} />
+          <button onClick={() => setShowPalette(true)} className={cn(iconBtn, 'w-9 h-9 md:w-8 md:h-8 hover:bg-tint-12')} aria-label={t(language, 'commandPalette')} title="Ctrl/⌘ K">
             <Command className="w-4 h-4" />
           </button>
-          <button onClick={() => setShowSummary(true)} className={cn(iconBtn, 'h-9 px-2 gap-1 w-auto hover:bg-tint-12')} aria-label={t(language, 'weeklySummary')} title={t(language, 'weeklySummary')}>
+          <button onClick={() => setShowSummary(true)} className={cn(iconBtn, 'h-9 md:h-8 px-1.5 gap-1 w-auto hover:bg-tint-12')} aria-label={t(language, 'weeklySummary')} title={t(language, 'weeklySummary')}>
             <Flame className="w-4 h-4" />{streak > 0 && <span className="type-body-sm">{streak}</span>}
           </button>
           <button
             onClick={() => dispatch({ type: 'OPEN_COMPOSER' })}
-            className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')}
+            className={cn(iconBtn, 'w-9 h-9 md:w-8 md:h-8 hover:bg-tint-12')}
             aria-label={t(language, 'composeEmail')}
             title={t(language, 'composeEmail')}
           >
@@ -332,7 +332,7 @@ export function Sidebar() {
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')}
+            className={cn(iconBtn, 'w-9 h-9 md:w-8 md:h-8 hover:bg-tint-12')}
             aria-label={t(language, 'settings')}
             title={t(language, 'settings')}
           >
