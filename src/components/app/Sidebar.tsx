@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback, Fragment } from 'react';
 import { useApp, generateId } from '@/context/AppContext';
 import { t } from '@/i18n/translations';
 import { format, addDays } from 'date-fns';
-import { Search, Inbox, CalendarDays, Star, CalendarClock, Plus, Settings, Menu, MoreHorizontal, PanelLeftClose, Mail, Command, Flame } from 'lucide-react';
+import { Search, Inbox, CalendarDays, Star, CalendarClock, Plus, Settings, Menu, MoreHorizontal, PanelLeftClose, Mail, Command, Flame, LogIn, LogOut } from 'lucide-react';
 import { WallpaperPicker } from './WallpaperPicker';
 import { DailyPlanner } from './DailyPlanner';
 import { SettingsDialog } from './SettingsDialog';
@@ -23,6 +23,8 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
 
 const smartLists = [
   { id: 'inbox', icon: Inbox, key: 'inbox', chip: 'bg-smart-inbox' },
@@ -48,6 +50,13 @@ export function Sidebar() {
   const [deletingListId, setDeletingListId] = useState<string | null>(null);
   const [emojiListId, setEmojiListId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
+  const [signedIn, setSignedIn] = useState(false);
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((_e, s) => setSignedIn(!!s));
+    supabase.auth.getSession().then(({ data: { session } }) => setSignedIn(!!session));
+    return () => data.subscription.unsubscribe();
+  }, []);
   const isPhone = () => typeof window !== 'undefined' && window.innerWidth < 768;
 
   // Phones start with the menu closed so the tasks are visible first.
@@ -311,6 +320,18 @@ export function Sidebar() {
             );
           })}
         </nav>
+
+        <div className="px-3 pb-2">
+          {signedIn ? (
+            <button onClick={() => supabase.auth.signOut()} className="w-full flex items-center gap-2 px-3 py-2 rounded-row type-body-md text-foreground hover:bg-tint-4">
+              <LogOut className="w-4 h-4" /> Sign out
+            </button>
+          ) : (
+            <button onClick={() => navigate('/auth')} className="w-full flex items-center justify-center gap-2 h-10 rounded-row type-body-md bg-primary text-primary-foreground hover:opacity-90">
+              <LogIn className="w-4 h-4" /> Sign in or sign up
+            </button>
+          )}
+        </div>
 
         {/* Bottom actions */}
         <div className="p-3 border-t-[0.5px] border-tint-12 flex items-center justify-between gap-0.5">
