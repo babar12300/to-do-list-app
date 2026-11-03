@@ -1,5 +1,12 @@
 ## Reporting a Vulnerability
 
 Contact me at:-
-# astori.dev@gmail.com
-# astori_dev@outlook.com
+1)astori.dev@gmail.com
+2)astori_dev@outlook.com
+
+
+
+
+##GITHUB
+
+#astori-dev
