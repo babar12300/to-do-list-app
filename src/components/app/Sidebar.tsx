@@ -48,6 +48,19 @@ export function Sidebar() {
   const [deletingListId, setDeletingListId] = useState<string | null>(null);
   const [emojiListId, setEmojiListId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const isPhone = () => typeof window !== 'undefined' && window.innerWidth < 768;
+
+  // Phones start with the menu closed so the tasks are visible first.
+  useEffect(() => {
+    if (isPhone() && sidebarOpen) dispatch({ type: 'TOGGLE_SIDEBAR' });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const selectList = (id: string) => {
+    dispatch({ type: 'SET_ACTIVE_LIST', payload: id });
+    dispatch({ type: 'SET_SEARCH', payload: '' });
+    if (isPhone()) dispatch({ type: 'TOGGLE_SIDEBAR' });
+  };
 
   useEffect(() => {
     if (editingListId && inputRef.current) {
@@ -134,7 +147,7 @@ export function Sidebar() {
       {/* Mobile toggle */}
       <button
         onClick={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
-        className="fixed top-3 left-3 z-50 flex w-8 h-8 items-center justify-center rounded-full bg-white border-[0.5px] border-black/[0.12] shadow-[0_8px_20px_rgba(0,0,0,0.12)] md:hidden"
+        className={cn("fixed top-3 left-3 z-50 flex w-10 h-10 items-center justify-center rounded-full bg-white border-[0.5px] border-black/[0.12] shadow-[0_8px_20px_rgba(0,0,0,0.12)] md:hidden", sidebarOpen && "hidden")}
         aria-label="Toggle menu"
       >
         <Menu className="w-5 h-5 text-foreground" />
@@ -150,7 +163,7 @@ export function Sidebar() {
 
       <aside
         className={cn(
-          "fixed md:absolute z-40 md:top-[10px] md:left-[10px] md:bottom-[10px] md:h-auto w-[200px] flex flex-col bg-white rounded-panel border-[0.5px] border-black/[0.12] shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300",
+          "fixed md:absolute z-40 top-0 bottom-0 left-0 md:top-[10px] md:left-[10px] md:bottom-[10px] md:h-auto w-[min(280px,85vw)] md:w-[220px] flex flex-col bg-white rounded-panel border-[0.5px] border-black/[0.12] shadow-[0_8px_20px_rgba(0,0,0,0.12)] transition-all duration-300",
           sidebarOpen ? "translate-x-0" : "-translate-x-full md:-translate-x-[calc(100%+10px)]"
         )}
       >
@@ -158,7 +171,7 @@ export function Sidebar() {
         <div className="flex items-center justify-end px-3 pt-3">
           <button
             onClick={() => dispatch({ type: 'TOGGLE_SIDEBAR' })}
-            className={cn(iconBtn, 'w-6 h-6')}
+            className={cn(iconBtn, 'w-9 h-9 md:w-6 md:h-6')}
             aria-label="Collapse sidebar"
           >
             <PanelLeftClose className="w-4 h-4" />
@@ -191,9 +204,9 @@ export function Sidebar() {
             return (
               <button
                 key={item.id}
-                onClick={() => { dispatch({ type: 'SET_ACTIVE_LIST', payload: item.id }); dispatch({ type: 'SET_SEARCH', payload: '' }); }}
+                onClick={() => selectList(item.id)}
                 className={cn(
-                  "w-full flex items-center gap-2 px-3 py-2 rounded-row type-body-md transition-colors",
+                  "w-full flex items-center gap-2 px-3 py-2.5 md:py-2 rounded-row type-body-md transition-colors",
                   active ? "bg-tint-4" : "hover:bg-tint-4"
                 )}
                 aria-current={active ? 'page' : undefined}
@@ -250,11 +263,11 @@ export function Sidebar() {
                   <ContextMenu onOpenChange={open => setMenuOpenListId(open ? list.id : null)}>
                     <ContextMenuTrigger asChild>
                       <div
-                        onClick={() => { dispatch({ type: 'SET_ACTIVE_LIST', payload: list.id }); dispatch({ type: 'SET_SEARCH', payload: '' }); }}
+                        onClick={() => selectList(list.id)}
                         onDoubleClick={() => { setEditingListId(list.id); setEditingName(list.name); }}
                         role="button"
                         tabIndex={0}
-                        onKeyDown={e => { if (e.key === 'Enter') { dispatch({ type: 'SET_ACTIVE_LIST', payload: list.id }); dispatch({ type: 'SET_SEARCH', payload: '' }); } }}
+                        onKeyDown={e => { if (e.key === 'Enter') selectList(list.id); }}
                         className={cn(
                           "w-full flex items-center gap-2 px-3 py-2 rounded-row type-body-md transition-colors cursor-pointer",
                           active || menuOpenListId === list.id ? "bg-tint-4" : "hover:bg-tint-4"
@@ -300,26 +313,28 @@ export function Sidebar() {
         </nav>
 
         {/* Bottom actions */}
-        <div className="p-3 border-t-[0.5px] border-tint-12 flex items-center gap-1">
+        <div className="p-3 border-t-[0.5px] border-tint-12 flex flex-wrap items-center justify-between gap-1">
           <WallpaperPicker />
-          <DailyPlanner className={cn(iconBtn, 'w-8 h-8')} />
-          <button onClick={() => setShowPalette(true)} className={cn(iconBtn, 'w-8 h-8')} aria-label={t(language, 'commandPalette')} title="Ctrl/⌘ K">
+          <DailyPlanner className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')} />
+          <button onClick={() => setShowPalette(true)} className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')} aria-label={t(language, 'commandPalette')} title="Ctrl/⌘ K">
             <Command className="w-4 h-4" />
           </button>
-          <button onClick={() => setShowSummary(true)} className={cn(iconBtn, 'h-8 px-2 gap-1 w-auto')} aria-label={t(language, 'weeklySummary')}>
+          <button onClick={() => setShowSummary(true)} className={cn(iconBtn, 'h-9 px-2 gap-1 w-auto hover:bg-tint-12')} aria-label={t(language, 'weeklySummary')} title={t(language, 'weeklySummary')}>
             <Flame className="w-4 h-4" />{streak > 0 && <span className="type-body-sm">{streak}</span>}
           </button>
           <button
             onClick={() => dispatch({ type: 'OPEN_COMPOSER' })}
-            className={cn(iconBtn, 'w-8 h-8')}
+            className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')}
             aria-label={t(language, 'composeEmail')}
+            title={t(language, 'composeEmail')}
           >
             <Mail className="w-4 h-4" />
           </button>
           <button
             onClick={() => setShowSettings(true)}
-            className={cn(iconBtn, 'w-8 h-8')}
+            className={cn(iconBtn, 'w-9 h-9 hover:bg-tint-12')}
             aria-label={t(language, 'settings')}
+            title={t(language, 'settings')}
           >
             <Settings className="w-4 h-4" />
           </button>
