@@ -23,7 +23,6 @@ import {
   AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
 const smartLists = [
@@ -50,7 +49,6 @@ export function Sidebar() {
   const [deletingListId, setDeletingListId] = useState<string | null>(null);
   const [emojiListId, setEmojiListId] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
   const [signedIn, setSignedIn] = useState(false);
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((_e, s) => setSignedIn(!!s));
@@ -327,9 +325,9 @@ export function Sidebar() {
               <LogOut className="w-4 h-4" /> Sign out
             </button>
           ) : (
-            <button onClick={() => navigate('/auth')} className="w-full flex items-center justify-center gap-2 h-10 rounded-row type-body-md bg-primary text-primary-foreground hover:opacity-90">
+            <a href="/auth" className="w-full flex items-center justify-center gap-2 h-10 rounded-row type-body-md bg-primary text-primary-foreground hover:opacity-90">
               <LogIn className="w-4 h-4" /> Sign in or sign up
-            </button>
+            </a>
           )}
         </div>
 
