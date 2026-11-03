@@ -194,7 +194,7 @@ export function TaskList() {
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           {groups.map(([groupName, groupTasks]) => (
             <div key={groupName} className="animate-fade-in-up">
-              <p className={`type-body-sm mt-6 mb-2 px-3 ${onWallpaper}`}>
+              <p className="inline-block mt-6 mb-2 mx-1 rounded-full bg-white/[0.65] backdrop-blur-[8px] px-3 py-0.5 type-body-sm font-medium !text-foreground">
                 {groupName}
               </p>
               <SortableContext items={groupTasks.map(t => t.id)} strategy={verticalListSortingStrategy}>

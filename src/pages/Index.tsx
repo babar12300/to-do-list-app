@@ -81,7 +81,7 @@ function AppLayout() {
         <Sidebar />
 
         {/* Main content area */}
-        <div className={cn("flex-1 flex justify-center min-w-0 p-4 md:p-6 lg:p-8 transition-all duration-300", sidebarOpen ? "md:ml-[220px]" : "md:ml-0")}>
+        <div className={cn("flex-1 flex justify-center min-w-0 px-4 pt-16 pb-6 md:p-6 lg:p-8 transition-all duration-300", sidebarOpen ? "md:ml-[240px]" : "md:ml-0")}>
           <div className="w-full max-w-[600px]">
             <TaskList />
           </div>
