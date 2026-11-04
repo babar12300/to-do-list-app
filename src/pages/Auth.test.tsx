@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Auth from './Auth';
@@ -37,9 +37,9 @@ describe('account pages', () => {
     const user = open();
     await user.type(screen.getByLabelText('Email'), 'person@example.com');
     await user.type(screen.getByLabelText('Password', { exact: true }), 'secret123');
-    await user.click(screen.getByRole('button', { name: 'Sign in', exact: true }));
+    await user.click(screen.getByRole('button', { name: 'Sign in' }));
     expect(mocks.signIn).toHaveBeenCalledWith({ email: 'person@example.com', password: 'secret123' });
-    mocks.change.mock.calls[0][0]('SIGNED_IN', { user: { id: 'account' } });
+    act(() => mocks.change.mock.calls[0][0]('SIGNED_IN', { user: { id: 'account' } }));
     expect(await screen.findByRole('heading', { name: 'My tasks' })).toBeInTheDocument();
   });
 
@@ -48,7 +48,7 @@ describe('account pages', () => {
     await user.type(screen.getByLabelText('Name'), 'Alex');
     await user.type(screen.getByLabelText('Email'), 'alex@example.com');
     await user.type(screen.getByLabelText('Password', { exact: true }), 'secret123');
-    await user.click(screen.getByRole('button', { name: 'Sign up', exact: true }));
+    await user.click(screen.getByRole('button', { name: 'Sign up' }));
     expect(mocks.signUp).toHaveBeenCalledWith({ email: 'alex@example.com', password: 'secret123', options: {
       emailRedirectTo: window.location.origin, data: { display_name: 'Alex' },
     } });
@@ -68,9 +68,9 @@ describe('account pages', () => {
     const user = open();
     await user.type(screen.getByLabelText('Email'), 'alex@example.com');
     await user.type(screen.getByLabelText('Password', { exact: true }), 'secret123');
-    await user.click(screen.getByRole('button', { name: 'Sign in', exact: true }));
+    await user.click(screen.getByRole('button', { name: 'Sign in' }));
     expect(await screen.findByRole('alert')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Sign in', exact: true })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Sign in' })).toBeEnabled();
     expect(screen.getByLabelText('Email')).toHaveValue('alex@example.com');
   });
 
