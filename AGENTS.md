@@ -1,6 +1,7 @@
 # AGENTS.md
 
 ## Architecture decisions
+- Tasks and lists sync as an account-owned plan using revision-checked writes and three-way field merges; per-account local caches retain offline changes while guest data stays separate to prevent cross-account leakage. Refresh on focus, reconnection, and a short interval keeps devices current without replacing concurrent edits.
 - Account entry uses one shared form on public sign-in, sign-up and forgot-password routes (with /auth retained); recovery stays public and validates the recovery session before allowing a password update.
 - Daily planning runs in the authenticated daily-plan Edge Function using server-only Lovable AI Gateway credentials and SDK Responses streaming; the UI receives a plain-text plan without changing tasks, so model secrets and planning logic never run in the browser.
 - Device wallpapers are resized to bitmap data URLs and retained in local app preferences, with a storage-capacity check before selection, so personal photos stay on the device and remain selectable after reload.

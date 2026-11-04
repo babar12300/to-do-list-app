@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      account_plans: {
+        Row: {
+          lists: Json
+          revision: number
+          tasks: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          lists?: Json
+          revision?: number
+          tasks?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          lists?: Json
+          revision?: number
+          tasks?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_path: string | null
@@ -40,7 +64,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      save_account_plan: {
+        Args: { expected_revision: number; new_lists: Json; new_tasks: Json }
+        Returns: {
+          lists: Json
+          revision: number
+          tasks: Json
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "account_plans"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
     }
     Enums: {
       [_ in never]: never

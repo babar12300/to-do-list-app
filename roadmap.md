@@ -13,3 +13,7 @@
 - [x] Complete separate sign-in/sign-up pages and safe password recovery.
 - [x] Pass 22 account/sidebar tests; verify phone/desktop links, password visibility, recovery guard, and a real authenticated session across reload.
 - [ ] Verify real signup confirmation, password-reset email delivery, and provider authorization: requires completing email/provider interactions; mocked submissions are tested, but external flows are unverified.
+
+# Account task syncing
+- [ ] Add private task/list storage, existing-task import, account isolation, and offline retry.
+- [ ] Test merge behavior and verify syncing across two signed-in browser sessions and reloads.
