@@ -37,7 +37,7 @@ const iconBtn =
   'flex items-center justify-center rounded-full text-tint-56 transition-[background,transform] duration-100 ease-out hover:bg-tint-4 active:bg-tint-12 active:scale-[0.85]';
 
 export function Sidebar() {
-  const { state, dispatch } = useApp();
+  const { state, dispatch, syncStatus } = useApp();
   const { language, activeListId, tasks, lists, searchQuery, sidebarOpen } = state;
   const [editingListId, setEditingListId] = useState<string | null>(null);
   const [editingName, setEditingName] = useState('');
@@ -320,6 +320,9 @@ export function Sidebar() {
         </nav>
 
         <div className="px-3 pb-2">
+          {signedIn && <p role="status" className="px-3 pb-1 text-xs text-muted-foreground">
+            {syncStatus === 'synced' ? 'Tasks synced' : syncStatus === 'offline' ? 'Offline · changes saved on this device' : syncStatus === 'error' ? 'Sync paused · retrying shortly' : 'Syncing tasks…'}
+          </p>}
           {signedIn ? (
             <button onClick={() => supabase.auth.signOut()} className="w-full flex items-center gap-2 px-3 py-2 rounded-row type-body-md text-foreground hover:bg-tint-4">
               <LogOut className="w-4 h-4" /> Sign out

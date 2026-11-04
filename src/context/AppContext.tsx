@@ -1,6 +1,9 @@
-import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef } from 'react';
+import React, { createContext, useContext, useReducer, useEffect, useCallback, useRef, useState } from 'react';
 import { defaultWallpaper } from '@/data/wallpapers';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
+import { cloudTasks } from '@/lib/cloud-tasks';
+import { TaskSync, type Plan, type SyncStatus } from '@/lib/task-sync';
 
 export interface Task {
   id: string;
@@ -40,6 +43,7 @@ export interface AppState {
 }
 
 type Action =
+  | { type: 'REPLACE_PLAN'; payload: Plan }
   | { type: 'ADD_TASK'; payload: Task }
   | { type: 'UPDATE_TASK'; payload: { id: string; updates: Partial<Task> } }
   | { type: 'DELETE_TASK'; payload: string }
@@ -83,6 +87,9 @@ const defaultState: AppState = {
 
 function reducer(state: AppState, action: Action): AppState {
   switch (action.type) {
+    case 'REPLACE_PLAN':
+      return { ...state, ...action.payload, activeTaskId: null,
+        activeListId: ['inbox', 'today', 'upcoming', 'starred', ...action.payload.lists.map(l => l.id)].includes(state.activeListId) ? state.activeListId : 'inbox' };
     case 'ADD_TASK':
       return { ...state, tasks: [action.payload, ...state.tasks] };
     case 'UPDATE_TASK':
@@ -160,21 +167,77 @@ export function persistable(s: AppState) {
 interface AppContextType {
   state: AppState;
   dispatch: React.Dispatch<Action>;
+  syncStatus: SyncStatus;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, undefined, loadState);
+  const [state, rawDispatch] = useReducer(reducer, undefined, loadState);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus>('local');
   const timerRef = useRef<number>();
   const stateRef = useRef(state);
   stateRef.current = state;
+  const guestRef = useRef<Plan>({ tasks: state.tasks, lists: state.lists });
+  const syncRef = useRef<TaskSync>();
+  if (!syncRef.current) {
+    syncRef.current = new TaskSync(cloudTasks, localStorage, plan => {
+      stateRef.current = reducer(stateRef.current, { type: 'REPLACE_PLAN', payload: plan });
+      rawDispatch({ type: 'REPLACE_PLAN', payload: plan });
+    }, setSyncStatus);
+  }
+  const dispatch = useCallback((action: Action) => {
+    const previous = stateRef.current;
+    const next = reducer(previous, action);
+    stateRef.current = next;
+    rawDispatch(action);
+    if (next.tasks !== previous.tasks || next.lists !== previous.lists) {
+      const plan = { tasks: next.tasks, lists: next.lists };
+      if (syncRef.current?.owner) {
+        try { syncRef.current.update(plan); } catch { setSyncStatus('error'); toast.error('Device storage is full. Your latest changes have not been saved.'); }
+      } else guestRef.current = plan;
+    }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    let authEventSeen = false;
+    const applySession = (userId: string | null) => {
+      if (!active || syncRef.current?.owner === userId) return;
+      try {
+        syncRef.current?.switchAccount(userId, guestRef.current);
+        if (userId) {
+          guestRef.current = { tasks: [], lists: [] };
+          localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...guestRef.current })));
+        }
+      } catch { setSyncStatus('error'); }
+    };
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      authEventSeen = true;
+      // Defer database calls until the auth callback has released its lock.
+      queueMicrotask(() => applySession(session?.user.id ?? null));
+    });
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!authEventSeen) applySession(session?.user.id ?? null);
+    }).catch(() => setSyncStatus('error'));
+    const refresh = () => { void syncRef.current?.sync(); };
+    const timer = window.setInterval(refresh, 10000);
+    window.addEventListener('online', refresh);
+    window.addEventListener('focus', refresh);
+    return () => {
+      active = false;
+      data.subscription.unsubscribe();
+      clearInterval(timer);
+      window.removeEventListener('online', refresh);
+      window.removeEventListener('focus', refresh);
+    };
+  }, []);
 
   const saveState = useCallback((s: AppState) => {
     clearTimeout(timerRef.current);
     timerRef.current = window.setTimeout(() => {
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(persistable(s)));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...s, ...guestRef.current })));
       } catch {
         toast.error('Storage is full. Please delete some completed tasks.');
       }
@@ -191,7 +254,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const flush = () => {
       clearTimeout(timerRef.current);
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(persistable(stateRef.current)));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...guestRef.current })));
       } catch {}
     };
     window.addEventListener('pagehide', flush);
@@ -199,7 +262,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ state, dispatch, syncStatus }}>
       {children}
     </AppContext.Provider>
   );
