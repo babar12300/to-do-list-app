@@ -8,3 +8,8 @@
 - [x] Finish task/deadline planning, validation, and error handling.
 - [x] Deploy function; pass 19 planner/sidebar tests, check sign-in screen, and verify a real AI Gateway plan.
 - [ ] Signed-in end-to-end planning and wallpaper verification: blocked because the app has no signed-up account; the user must sign in first.
+
+# Account pages
+- [x] Complete separate sign-in/sign-up pages and safe password recovery.
+- [x] Pass 22 account/sidebar tests; verify phone/desktop links, password visibility, recovery guard, and a real authenticated session across reload.
+- [ ] Verify real signup confirmation, password-reset email delivery, and provider authorization: requires completing email/provider interactions; mocked submissions are tested, but external flows are unverified.
