@@ -6,7 +6,7 @@ import { createTask, mockLocalStorage, renderWithProvider } from '@/test/helpers
 
 const mocks = vi.hoisted(() => ({ session: vi.fn(), invoke: vi.fn(), signIn: vi.fn() }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: {
-  auth: { getSession: mocks.session }, functions: { invoke: mocks.invoke },
+  auth: { getSession: mocks.session, onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }) }, functions: { invoke: mocks.invoke },
 } }));
 vi.mock('@/integrations/lovable', () => ({ lovable: { auth: { signInWithOAuth: mocks.signIn } } }));
 
