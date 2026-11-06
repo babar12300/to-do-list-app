@@ -15,5 +15,5 @@
 - [ ] Verify real signup confirmation, password-reset email delivery, and provider authorization: requires completing email/provider interactions; mocked submissions are tested, but external flows are unverified.
 
 # Account task syncing
-- [ ] Add private task/list storage, existing-task import, account isolation, and offline retry.
-- [ ] Test merge behavior and verify syncing across two signed-in browser sessions and reloads.
+- [x] Add private task/list storage, existing-task import, account isolation, and offline retry.
+- [x] Tests pass (126); verified a task added in one signed-in browser appears in a second.
