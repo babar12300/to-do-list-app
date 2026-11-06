@@ -9,9 +9,9 @@ import { toast } from 'sonner';
 
 vi.mock('@/lib/device-wallpaper', () => ({ prepareDeviceWallpaper: vi.fn() }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
-const account = vi.hoisted(() => ({ user: { id: 'u1' } as { id: string } | null }));
+const account = vi.hoisted(() => ({ user: { id: 'u1' } as { id: string } | null, photos: [], refresh: async () => {} }));
 vi.mock('@/hooks/use-wallpaper-account', () => ({ useWallpaperAccount: () => ({
-  user: account.user, ready: true, photos: [], name: 'Me', avatar: null, loading: false, refresh: async () => {},
+  user: account.user, ready: true, photos: account.photos, name: 'Me', avatar: null, loading: false, refresh: account.refresh,
 }) }));
 vi.mock('@/lib/cloud-wallpapers', () => ({ IMAGE_BUCKET: 'personal-images', uploadPersonalImage: vi.fn(async () => 'u1/x.webp'), listCloudWallpapers: vi.fn(async () => []) }));
 
