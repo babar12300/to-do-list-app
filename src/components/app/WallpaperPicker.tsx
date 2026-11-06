@@ -62,6 +62,7 @@ export function WallpaperPicker() {
   }
 
   async function addFromDevice(file: File) {
+    if (!user) return;
     setAdding(true);
     try {
       const url = await prepareDeviceWallpaper(file);
@@ -146,10 +147,10 @@ export function WallpaperPicker() {
             event.target.value = '';
             if (file) void addFromDevice(file);
           }} />
-        <Button variant="outline" size="sm" className="w-full mb-3" disabled={adding} onClick={() => inputRef.current?.click()}>
+        {user && <Button variant="outline" size="sm" className="w-full mb-3" disabled={adding} onClick={() => inputRef.current?.click()}>
           {adding ? <Loader2 className="animate-spin" /> : <Upload />}
           {t(language, 'addWallpaperFromDevice')}
-        </Button>
+        </Button>}
         <div className="grid grid-cols-4 gap-2 max-h-[240px] overflow-y-auto">
           {customWallpapers.map(url => renderTile(url, wallpaperThumb(url), wallpaper === url, () => dispatch({ type: 'SET_WALLPAPER', payload: url })))}
           {cloudOnly.map(p => renderTile(p.path, p.url, false, () => void useCloudPhoto(p.path), opening === p.path))}

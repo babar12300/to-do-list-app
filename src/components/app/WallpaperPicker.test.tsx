@@ -9,6 +9,11 @@ import { toast } from 'sonner';
 
 vi.mock('@/lib/device-wallpaper', () => ({ prepareDeviceWallpaper: vi.fn() }));
 vi.mock('sonner', () => ({ toast: { error: vi.fn() } }));
+const account = vi.hoisted(() => ({ user: { id: 'u1' } as { id: string } | null, photos: [], refresh: async () => {} }));
+vi.mock('@/hooks/use-wallpaper-account', () => ({ useWallpaperAccount: () => ({
+  user: account.user, ready: true, photos: account.photos, name: 'Me', avatar: null, loading: false, refresh: account.refresh,
+}) }));
+vi.mock('@/lib/cloud-wallpapers', () => ({ IMAGE_BUCKET: 'personal-images', uploadPersonalImage: vi.fn(async () => 'u1/x.webp'), listCloudWallpapers: vi.fn(async () => []) }));
 
 const photo = 'data:image/webp;base64,ZGV2aWNlLXBob3Rv';
 function Selection() {
@@ -17,7 +22,14 @@ function Selection() {
 }
 
 describe('device wallpapers', () => {
-  beforeEach(() => { mockLocalStorage(); vi.clearAllMocks(); });
+  beforeEach(() => { mockLocalStorage(); vi.clearAllMocks(); account.user = { id: 'u1' }; });
+
+  it('does not offer device uploads to signed-out visitors', () => {
+    account.user = null;
+    renderWithProvider(<WallpaperPicker />);
+    fireEvent.click(screen.getByRole('button', { name: 'Wallpaper' }));
+    expect(screen.queryByRole('button', { name: 'Add from device' })).toBeNull();
+  });
 
   async function upload() {
     fireEvent.click(screen.getByRole('button', { name: 'Wallpaper' }));
