@@ -122,7 +122,7 @@ export default function Auth() {
           {mode === 'signin' ? <>New here? <Button asChild variant="link" className="h-auto px-1"><Link to="/sign-up">Create an account</Link></Button></>
             : <>Already have an account? <Button asChild variant="link" className="h-auto px-1"><Link to="/sign-in">Sign in</Link></Button></>}
         </p>
-        <div className="text-center mt-2"><Button asChild variant="ghost" className="text-sm"><Link to="/">Continue without an account</Link></Button></div>
+        <div className="text-center mt-2"><Button asChild variant="ghost" className="text-sm"><Link to="/?guest=1">Try it as a guest with sample tasks</Link></Button></div>
     </AuthLayout>
   );
 }
