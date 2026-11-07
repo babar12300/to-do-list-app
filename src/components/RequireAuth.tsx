@@ -36,11 +36,11 @@ export function RequireAuth({ children }: { children: ReactNode }) {
   if (status === 'out') {
     return (
       <div className="flex h-screen flex-col">
+        <div className="relative min-h-0 flex-1">{children}</div>
         <div role="status" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-primary px-3 py-1.5 text-center text-sm text-primary-foreground">
           <span>Guest mode · sample tasks reset when you reload</span>
           <Button asChild size="sm" variant="secondary" className="h-7"><Link to="/sign-up">Sign up to save</Link></Button>
         </div>
-        <div className="relative min-h-0 flex-1">{children}</div>
       </div>
     );
   }
