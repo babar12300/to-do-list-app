@@ -152,14 +152,14 @@ function loadState(): AppState {
     const saved = localStorage.getItem('taskly-state');
     if (saved) {
       const parsed = JSON.parse(saved);
-      // Guest changes are discarded on reload: always start from the samples.
-      return { ...defaultState, ...parsed, tasks: defaultState.tasks, lists: defaultState.lists };
+      return { ...defaultState, ...parsed };
     }
   } catch {}
   return defaultState;
 }
 
-// The composer's open/prefill state is a draft in progress, not app data: a
+// Guest edits are never saved (sampleRef is written instead), so a reload
+// restores the sample tasks. The composer's open/prefill state is a draft in progress, not app data: a
 // reload should never reopen a half-written email, so it is stripped on save.
 export function persistable(s: AppState) {
   return { ...s, composerOpen: false, composerPrefill: null };
@@ -211,7 +211,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         guestRef.current = sampleRef.current;
         syncRef.current?.switchAccount(userId, userId ? { tasks: [], lists: [] } : guestRef.current);
         if (userId) {
-          localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...guestRef.current })));
+          localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...sampleRef.current })));
         }
       } catch { setSyncStatus('error'); }
     };
@@ -240,7 +240,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     clearTimeout(timerRef.current);
     timerRef.current = window.setTimeout(() => {
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...s, ...guestRef.current })));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...s, ...sampleRef.current })));
       } catch {
         toast.error('Storage is full. Please delete some completed tasks.');
       }
@@ -257,7 +257,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const flush = () => {
       clearTimeout(timerRef.current);
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...guestRef.current })));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...sampleRef.current })));
       } catch {}
     };
     window.addEventListener('pagehide', flush);
