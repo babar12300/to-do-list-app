@@ -152,7 +152,8 @@ function loadState(): AppState {
     const saved = localStorage.getItem('taskly-state');
     if (saved) {
       const parsed = JSON.parse(saved);
-      return { ...defaultState, ...parsed };
+      // Guest changes are discarded on reload: always start from the samples.
+      return { ...defaultState, ...parsed, tasks: defaultState.tasks, lists: defaultState.lists };
     }
   } catch {}
   return defaultState;
@@ -178,7 +179,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const timerRef = useRef<number>();
   const stateRef = useRef(state);
   stateRef.current = state;
-  const guestRef = useRef<Plan>({ tasks: state.tasks, lists: state.lists });
+  const sampleRef = useRef<Plan>({ tasks: defaultState.tasks, lists: defaultState.lists });
+  const guestRef = useRef<Plan>(sampleRef.current);
   const syncRef = useRef<TaskSync>();
   if (!syncRef.current) {
     syncRef.current = new TaskSync(cloudTasks, localStorage, plan => {
@@ -205,9 +207,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const applySession = (userId: string | null) => {
       if (!active || syncRef.current?.owner === userId) return;
       try {
-        syncRef.current?.switchAccount(userId, guestRef.current);
+        // Guest sample edits never enter an account; signing out shows fresh samples.
+        guestRef.current = sampleRef.current;
+        syncRef.current?.switchAccount(userId, userId ? { tasks: [], lists: [] } : guestRef.current);
         if (userId) {
-          guestRef.current = { tasks: [], lists: [] };
           localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...guestRef.current })));
         }
       } catch { setSyncStatus('error'); }
