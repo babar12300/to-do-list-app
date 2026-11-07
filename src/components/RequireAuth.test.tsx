@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { RequireAuth } from './RequireAuth';
@@ -9,14 +9,23 @@ vi.mock('@/integrations/supabase/client', () => ({ supabase: { auth: {
   onAuthStateChange: () => ({ data: { subscription: { unsubscribe: () => {} } } }),
 } } }));
 
-function renderAt() {
-  render(<MemoryRouter initialEntries={['/']}><Routes>
+function renderAt(url = '/') {
+  render(<MemoryRouter initialEntries={[url]}><Routes>
     <Route path="/" element={<RequireAuth><p>My tasks</p></RequireAuth>} />
     <Route path="/sign-in" element={<p>Sign in page</p>} />
   </Routes></MemoryRouter>);
 }
 
 describe('RequireAuth', () => {
+  beforeEach(() => sessionStorage.clear());
+
+  it('lets visitors who choose guest mode in, with a sign-up prompt', async () => {
+    mocks.session.mockResolvedValue({ data: { session: null } });
+    renderAt('/?guest=1');
+    expect(await screen.findByText('My tasks')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Sign up to save' })).toBeInTheDocument();
+  });
+
   it('sends signed-out visitors to sign-in without showing tasks', async () => {
     mocks.session.mockResolvedValue({ data: { session: null } });
     renderAt();
