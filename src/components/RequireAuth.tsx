@@ -44,5 +44,5 @@ export function RequireAuth({ children }: { children: ReactNode }) {
       </div>
     );
   }
-  return <>{children}</>;
+  return <div className="h-screen">{children}</div>;
 }
