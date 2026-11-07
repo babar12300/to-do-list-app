@@ -158,7 +158,8 @@ function loadState(): AppState {
   return defaultState;
 }
 
-// The composer's open/prefill state is a draft in progress, not app data: a
+// Guest edits are never saved (sampleRef is written instead), so a reload
+// restores the sample tasks. The composer's open/prefill state is a draft in progress, not app data: a
 // reload should never reopen a half-written email, so it is stripped on save.
 export function persistable(s: AppState) {
   return { ...s, composerOpen: false, composerPrefill: null };
@@ -178,7 +179,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const timerRef = useRef<number>();
   const stateRef = useRef(state);
   stateRef.current = state;
-  const guestRef = useRef<Plan>({ tasks: state.tasks, lists: state.lists });
+  const sampleRef = useRef<Plan>({ tasks: defaultState.tasks, lists: defaultState.lists });
+  const guestRef = useRef<Plan>(sampleRef.current);
   const syncRef = useRef<TaskSync>();
   if (!syncRef.current) {
     syncRef.current = new TaskSync(cloudTasks, localStorage, plan => {
@@ -205,10 +207,11 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const applySession = (userId: string | null) => {
       if (!active || syncRef.current?.owner === userId) return;
       try {
-        syncRef.current?.switchAccount(userId, guestRef.current);
+        // Guest sample edits never enter an account; signing out shows fresh samples.
+        guestRef.current = sampleRef.current;
+        syncRef.current?.switchAccount(userId, userId ? { tasks: [], lists: [] } : guestRef.current);
         if (userId) {
-          guestRef.current = { tasks: [], lists: [] };
-          localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...guestRef.current })));
+          localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...sampleRef.current })));
         }
       } catch { setSyncStatus('error'); }
     };
@@ -237,7 +240,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     clearTimeout(timerRef.current);
     timerRef.current = window.setTimeout(() => {
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...s, ...guestRef.current })));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...s, ...sampleRef.current })));
       } catch {
         toast.error('Storage is full. Please delete some completed tasks.');
       }
@@ -254,7 +257,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     const flush = () => {
       clearTimeout(timerRef.current);
       try {
-        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...guestRef.current })));
+        localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...sampleRef.current })));
       } catch {}
     };
     window.addEventListener('pagehide', flush);

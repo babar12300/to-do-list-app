@@ -61,7 +61,7 @@ function AppLayout() {
   }, [incomingVisible, finishFade]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden relative transition-colors duration-300">
+    <div className="h-full w-full overflow-hidden relative transition-colors duration-300">
       {/* Wallpaper layers */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

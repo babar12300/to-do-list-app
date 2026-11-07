@@ -33,7 +33,9 @@ describe('DailyPlanner', () => {
   });
 
   it('submits the user deadlines and open tasks and displays the returned plan', async () => {
-    mockLocalStorage({ tasks: [createTask({ title: 'Call bank', dueDate: '2026-10-29' })], lists: [] });
+    const plan = { tasks: [createTask({ title: 'Call bank', dueDate: '2026-10-29' })], lists: [] };
+    mockLocalStorage({ tasks: [], lists: [] });
+    localStorage.setItem('taskly-account-signed-in', JSON.stringify({ data: plan, base: plan, revision: 1 }));
     const user = await open();
     await user.type(screen.getByLabelText('Describe your tasks and deadlines'), 'Finish report by 3pm');
     await user.click(screen.getByRole('button', { name: 'Create plan' }));
