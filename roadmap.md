@@ -17,3 +17,7 @@
 # Account task syncing
 - [x] Add private task/list storage, existing-task import, account isolation, and offline retry.
 - [x] Tests pass (126); verified a task added in one signed-in browser appears in a second.
+
+# Selective guest task transfer
+- [ ] Let guests select tasks during signup, preserving only selected tasks and their lists.
+- [ ] Test account isolation, confirmation/reload handling, and verify the selection and transfer flow.
