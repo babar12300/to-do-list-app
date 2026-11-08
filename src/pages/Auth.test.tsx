@@ -76,7 +76,7 @@ describe('account pages', () => {
     await user.type(screen.getByLabelText('Name'), 'Alex');
     await user.type(screen.getByLabelText('Email'), 'alex@example.com');
     await user.type(screen.getByLabelText('Password', { exact: true }), 'secret123');
-    await user.click(screen.getByRole('button', { name: 'Sign up', exact: true }));
+    await user.click(screen.getByRole('button', { name: /^Sign up$/ }));
     expect(readGuestTransfer(localStorage, 'alex@example.com')?.tasks.map(task => task.title)).toEqual(['My guest task']);
     expect(readGuestTransfer(localStorage, 'someone@example.com')).toBeNull();
   });
@@ -90,7 +90,7 @@ describe('account pages', () => {
     await user.type(screen.getByLabelText('Name'), 'Alex');
     await user.type(screen.getByLabelText('Email'), 'alex@example.com');
     await user.type(screen.getByLabelText('Password', { exact: true }), 'secret123');
-    await user.click(screen.getByRole('button', { name: 'Sign up', exact: true }));
+    await user.click(screen.getByRole('button', { name: /^Sign up$/ }));
     await screen.findByRole('alert');
     expect(readGuestTransfer(localStorage, 'alex@example.com')).toBeNull();
   });
