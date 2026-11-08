@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AuthLayout } from '@/components/app/AuthLayout';
+import { getGuestPlan, selectGuestTasks, stageGuestTransfer, clearGuestTransfer } from '@/lib/guest-transfer';
 
 type Mode = 'signin' | 'signup' | 'forgot';
 
@@ -21,6 +22,14 @@ export default function Auth() {
   const [error, setError] = useState('');
   const [notice, setNotice] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [guestPlan] = useState(() => sessionStorage.getItem('taskly-guest') === '1' ? getGuestPlan() : null);
+  const [selectedTasks, setSelectedTasks] = useState<string[]>([]);
+
+  function stageSelection(email: string | null) {
+    if (mode === 'signup' && guestPlan) {
+      return stageGuestTransfer(localStorage, selectGuestTasks(guestPlan, selectedTasks), email);
+    }
+  }
 
   useEffect(() => { setError(''); setNotice(''); setPassword(''); setShowPassword(false); }, [mode]);
 
@@ -47,28 +56,31 @@ export default function Auth() {
         const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (error) setError(error.message === 'Invalid login credentials' ? 'Wrong email or password.' : error.message);
       } else if (mode === 'signup') {
+        stageSelection(email);
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(), password,
           options: { emailRedirectTo: window.location.origin, data: { display_name: name.trim() } },
         });
-        if (error) setError(error.message);
+        if (error) { clearGuestTransfer(localStorage); setError(error.message); }
         else if (!data.session) setNotice('Check your email and tap the link to confirm your account.');
       } else {
         const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${window.location.origin}/reset-password` });
         if (error) setError(error.message);
         else setNotice('If that email has an account, a reset link is on its way.');
       }
-    } catch { setError('Could not connect. Please try again.'); }
+    } catch { if (mode === 'signup') clearGuestTransfer(localStorage); setError('Could not connect. Please try again.'); }
     finally { setBusy(false); }
   }
 
   async function oauth(provider: 'google' | 'lovable') {
     setBusy(true); setError(''); setNotice('');
     try {
-      const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin });
-      if (result.error) setError('Could not sign in. Please try again.');
+      const token = stageSelection(null);
+      const redirect = token ? `${window.location.origin}/?guestImport=${encodeURIComponent(token)}` : window.location.origin;
+      const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: redirect });
+      if (result.error) { if (mode === 'signup') clearGuestTransfer(localStorage); setError('Could not sign in. Please try again.'); }
       if (result.redirected) return;
-    } catch { setError('Could not connect. Please try again.'); }
+    } catch { if (mode === 'signup') clearGuestTransfer(localStorage); setError('Could not connect. Please try again.'); }
     finally { setBusy(false); }
   }
 
@@ -77,6 +89,25 @@ export default function Auth() {
   return (
     <AuthLayout>
         <h1 className="text-2xl font-bold text-foreground mb-6">{title}</h1>
+
+        {mode === 'signup' && guestPlan && guestPlan.tasks.length > 0 && (
+          <fieldset disabled={busy} className="mb-6 min-w-0">
+            <legend className="font-semibold text-foreground mb-2">Tasks to keep · {selectedTasks.length} selected</legend>
+            <div className="flex gap-2 mb-2">
+              <Button type="button" variant="ghost" size="sm" onClick={() => setSelectedTasks(guestPlan.tasks.map(task => task.id))}>Select all</Button>
+              <Button type="button" variant="ghost" size="sm" onClick={() => setSelectedTasks([])}>Clear selection</Button>
+            </div>
+            <div className="max-h-52 overflow-y-auto divide-y divide-border border-y border-border">
+              {guestPlan.tasks.map(task => (
+                <label key={task.id} className="flex min-h-12 cursor-pointer items-center gap-3 py-3 pr-2 text-sm text-foreground">
+                  <input type="checkbox" className="h-4 w-4 shrink-0 accent-primary" checked={selectedTasks.includes(task.id)}
+                    onChange={e => setSelectedTasks(ids => e.target.checked ? [...ids, task.id] : ids.filter(id => id !== task.id))} />
+                  <span className="min-w-0 break-words">{task.title}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        )}
 
         {mode !== 'forgot' && (
           <>

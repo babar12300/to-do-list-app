@@ -4,6 +4,8 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import Auth from './Auth';
 import ResetPassword from './ResetPassword';
+import { rememberGuestPlan, readGuestTransfer } from '@/lib/guest-transfer';
+import { createTask, mockLocalStorage } from '@/test/helpers';
 
 const mocks = vi.hoisted(() => ({ getUser: vi.fn(), change: vi.fn(), signIn: vi.fn(), signUp: vi.fn(), reset: vi.fn(), update: vi.fn(), oauth: vi.fn() }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: { auth: {
@@ -24,6 +26,9 @@ function open(path = '/sign-in') {
 describe('account pages', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    mockLocalStorage();
+    sessionStorage.clear();
+    rememberGuestPlan(null);
     window.location.hash = '';
     mocks.change.mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } });
     mocks.getUser.mockResolvedValue({ data: { user: null }, error: null });
@@ -61,6 +66,33 @@ describe('account pages', () => {
     await user.type(screen.getByLabelText('Email'), 'alex@example.com');
     await user.click(screen.getByRole('button', { name: 'Send reset link' }));
     expect(mocks.reset).toHaveBeenCalledWith('alex@example.com', { redirectTo: `${window.location.origin}/reset-password` });
+  });
+
+  it('lets guests choose tasks before signup and stages only the selection for confirmation', async () => {
+    sessionStorage.setItem('taskly-guest', '1');
+    rememberGuestPlan({ tasks: [createTask({ id: 'keep', title: 'My guest task' }), createTask({ id: 'skip', title: 'Unwanted sample' })], lists: [] });
+    const user = open('/sign-up');
+    await user.click(screen.getByRole('checkbox', { name: 'My guest task' }));
+    await user.type(screen.getByLabelText('Name'), 'Alex');
+    await user.type(screen.getByLabelText('Email'), 'alex@example.com');
+    await user.type(screen.getByLabelText('Password', { exact: true }), 'secret123');
+    await user.click(screen.getByRole('button', { name: /^Sign up$/ }));
+    expect(readGuestTransfer(localStorage, 'alex@example.com')?.tasks.map(task => task.title)).toEqual(['My guest task']);
+    expect(readGuestTransfer(localStorage, 'someone@example.com')).toBeNull();
+  });
+
+  it('discards the transfer after signup fails', async () => {
+    sessionStorage.setItem('taskly-guest', '1');
+    rememberGuestPlan({ tasks: [createTask({ id: 'keep', title: 'My guest task' })], lists: [] });
+    mocks.signUp.mockResolvedValue({ data: {}, error: { message: 'Signup failed' } });
+    const user = open('/sign-up');
+    await user.click(screen.getByRole('checkbox', { name: 'My guest task' }));
+    await user.type(screen.getByLabelText('Name'), 'Alex');
+    await user.type(screen.getByLabelText('Email'), 'alex@example.com');
+    await user.type(screen.getByLabelText('Password', { exact: true }), 'secret123');
+    await user.click(screen.getByRole('button', { name: /^Sign up$/ }));
+    await screen.findByRole('alert');
+    expect(readGuestTransfer(localStorage, 'alex@example.com')).toBeNull();
   });
 
   it('recovers from network errors without losing form input', async () => {

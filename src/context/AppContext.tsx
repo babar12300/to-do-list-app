@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { cloudTasks } from '@/lib/cloud-tasks';
 import { TaskSync, type Plan, type SyncStatus } from '@/lib/task-sync';
+import { rememberGuestPlan, readGuestTransfer, clearGuestTransfer } from '@/lib/guest-transfer';
 
 export interface Task {
   id: string;
@@ -197,31 +198,35 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       const plan = { tasks: next.tasks, lists: next.lists };
       if (syncRef.current?.owner) {
         try { syncRef.current.update(plan); } catch { setSyncStatus('error'); toast.error('Device storage is full. Your latest changes have not been saved.'); }
-      } else guestRef.current = plan;
+      } else { guestRef.current = plan; rememberGuestPlan(plan); }
     }
   }, []);
 
   useEffect(() => {
     let active = true;
     let authEventSeen = false;
-    const applySession = (userId: string | null) => {
+    const applySession = (userId: string | null, email?: string) => {
       if (!active || syncRef.current?.owner === userId) return;
       try {
-        // Guest sample edits never enter an account; signing out shows fresh samples.
+        // Only an explicitly selected signup draft can enter an account.
+        const transfer = userId ? readGuestTransfer(localStorage, email, new URLSearchParams(window.location.search).get('guestImport')) : null;
         guestRef.current = sampleRef.current;
-        syncRef.current?.switchAccount(userId, userId ? { tasks: [], lists: [] } : guestRef.current);
+        syncRef.current?.switchAccount(userId, transfer ?? (userId ? { tasks: [], lists: [] } : guestRef.current));
         if (userId) {
+          // switchAccount persisted the imported plan in its account-owned retry cache.
+          if (transfer) clearGuestTransfer(localStorage);
+          rememberGuestPlan(null);
           localStorage.setItem('taskly-state', JSON.stringify(persistable({ ...stateRef.current, ...sampleRef.current })));
-        }
+        } else rememberGuestPlan(guestRef.current);
       } catch { setSyncStatus('error'); }
     };
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
       authEventSeen = true;
       // Defer database calls until the auth callback has released its lock.
-      queueMicrotask(() => applySession(session?.user.id ?? null));
+      queueMicrotask(() => applySession(session?.user.id ?? null, session?.user.email));
     });
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (!authEventSeen) applySession(session?.user.id ?? null);
+      if (!authEventSeen) applySession(session?.user.id ?? null, session?.user.email);
     }).catch(() => setSyncStatus('error'));
     const refresh = () => { void syncRef.current?.sync(); };
     const timer = window.setInterval(refresh, 10000);
@@ -234,6 +239,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('online', refresh);
       window.removeEventListener('focus', refresh);
     };
+  }, []);
+
+  useEffect(() => {
+    if (!syncRef.current?.owner) rememberGuestPlan(guestRef.current);
   }, []);
 
   const saveState = useCallback((s: AppState) => {
