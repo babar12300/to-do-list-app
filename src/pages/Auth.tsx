@@ -27,7 +27,7 @@ export default function Auth() {
 
   function stageSelection(email: string | null) {
     if (mode === 'signup' && guestPlan) {
-      stageGuestTransfer(localStorage, selectGuestTasks(guestPlan, selectedTasks), email);
+      return stageGuestTransfer(localStorage, selectGuestTasks(guestPlan, selectedTasks), email);
     }
   }
 
@@ -75,8 +75,9 @@ export default function Auth() {
   async function oauth(provider: 'google' | 'lovable') {
     setBusy(true); setError(''); setNotice('');
     try {
-      stageSelection(null);
-      const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: window.location.origin });
+      const token = stageSelection(null);
+      const redirect = token ? `${window.location.origin}/?guestImport=${encodeURIComponent(token)}` : window.location.origin;
+      const result = await lovable.auth.signInWithOAuth(provider, { redirect_uri: redirect });
       if (result.error) { if (mode === 'signup') clearGuestTransfer(localStorage); setError('Could not sign in. Please try again.'); }
       if (result.redirected) return;
     } catch { if (mode === 'signup') clearGuestTransfer(localStorage); setError('Could not connect. Please try again.'); }

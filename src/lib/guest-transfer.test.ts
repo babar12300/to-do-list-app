@@ -44,4 +44,11 @@ describe('guest signup transfer', () => {
     await new Promise(resolve => setTimeout(resolve, 0));
     expect(remote.tasks).toHaveLength(2);
   });
+  it('requires the matching OAuth callback before importing an OAuth selection', () => {
+    const selected = selectGuestTasks(plan, ['keep']);
+    const token = stageGuestTransfer(localStorage, selected, null);
+    expect(readGuestTransfer(localStorage, 'other@example.com')).toBeNull();
+    expect(readGuestTransfer(localStorage, 'other@example.com', 'wrong')).toBeNull();
+    expect(readGuestTransfer(localStorage, 'oauth@example.com', token)).toEqual(selected);
+  });
 });

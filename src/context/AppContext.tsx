@@ -209,7 +209,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       if (!active || syncRef.current?.owner === userId) return;
       try {
         // Only an explicitly selected signup draft can enter an account.
-        const transfer = userId ? readGuestTransfer(localStorage, email) : null;
+        const transfer = userId ? readGuestTransfer(localStorage, email, new URLSearchParams(window.location.search).get('guestImport')) : null;
         guestRef.current = sampleRef.current;
         syncRef.current?.switchAccount(userId, transfer ?? (userId ? { tasks: [], lists: [] } : guestRef.current));
         if (userId) {
