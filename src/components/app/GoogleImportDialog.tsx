@@ -3,10 +3,8 @@ import { toast } from 'sonner';
 import { useApp } from '@/context/AppContext';
 import { t } from '@/i18n/translations';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
 import { parseGoogleFiles, parsePastedText, type ImportedTask } from '@/lib/google-import';
 
 interface Props {
@@ -22,6 +20,7 @@ export function GoogleImportDialog({ open, onOpenChange }: Props) {
   const [text, setText] = useState('');
   const [listId, setListId] = useState(state.lists.some(l => l.id === state.activeListId) ? state.activeListId : state.lists[0]?.id ?? 'inbox');
   const [busy, setBusy] = useState(false);
+  const [mode, setMode] = useState<'file' | 'paste'>('file');
 
   const load = (next: ImportedTask[]) => {
     setItems(next);
@@ -83,12 +82,12 @@ export function GoogleImportDialog({ open, onOpenChange }: Props) {
           <DialogDescription>{t(lang, 'importIntro')}</DialogDescription>
         </DialogHeader>
 
-        <Tabs defaultValue="file" onValueChange={() => load([])}>
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="file">{t(lang, 'importUploadTab')}</TabsTrigger>
-            <TabsTrigger value="paste">{t(lang, 'importPasteTab')}</TabsTrigger>
-          </TabsList>
-          <TabsContent value="file" className="space-y-2">
+        <div className="grid w-full grid-cols-2 gap-2">
+          <Button variant={mode === 'file' ? 'default' : 'secondary'} size="sm" onClick={() => { setMode('file'); load([]); }}>{t(lang, 'importUploadTab')}</Button>
+          <Button variant={mode === 'paste' ? 'default' : 'secondary'} size="sm" onClick={() => { setMode('paste'); load([]); }}>{t(lang, 'importPasteTab')}</Button>
+        </div>
+        {mode === 'file' ? (
+          <div className="space-y-2">
             <p className="type-body-sm text-muted-foreground">{t(lang, 'importFileHelp')}</p>
             <input
               type="file"
@@ -99,9 +98,11 @@ export function GoogleImportDialog({ open, onOpenChange }: Props) {
               onChange={e => onFiles(e.target.files)}
               className="block w-full text-sm file:mr-3 file:rounded-md file:border-0 file:bg-secondary file:px-3 file:py-2 file:text-secondary-foreground"
             />
-          </TabsContent>
-          <TabsContent value="paste" className="space-y-2">
-            <Textarea
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <textarea
+              className="w-full rounded-md border border-input bg-background p-2 text-sm"
               rows={6}
               value={text}
               onChange={e => setText(e.target.value)}
@@ -111,8 +112,8 @@ export function GoogleImportDialog({ open, onOpenChange }: Props) {
             <Button variant="secondary" size="sm" onClick={() => load(parsePastedText(text))} disabled={!text.trim()}>
               {t(lang, 'importPreview')}
             </Button>
-          </TabsContent>
-        </Tabs>
+          </div>
+        )}
 
         {items.length > 0 && (
           <div className="space-y-3">
